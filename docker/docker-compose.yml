@@ -1,0 +1,59 @@
+# docker-compose.yml
+#
+# Run with: docker compose -f docker/docker-compose.yml up
+# This gives you Kurai + Postgres + Redis in one command.
+
+version: "3.9"
+
+services:
+  kurai:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - STORAGE_BACKEND=postgres   # file | postgres
+      - DATABASE_URL=postgresql://kurai:kurai@postgres:5432/kurai
+      - REDIS_URL=redis://redis:6379
+      - RATE_LIMIT_ENABLED=true
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: kurai
+      POSTGRES_USER: kurai
+      POSTGRES_PASSWORD: kurai
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kurai"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:

@@ -1,0 +1,33 @@
+# .kurai/kurai.config.yaml
+# This file is committed to the developer's project repository.
+# It configures Kurai's behavior for this specific project.
+
+version: 1
+
+server:
+  port: 3000                    # port to bind to
+  open: true                    # open browser on start
+
+storage:
+  backend: file                 # file | postgres
+  path: .kurai/data             # for file backend
+
+proxy:
+  timeout: 30000                # ms — per-request timeout
+  maxResponseSize: 52428800     # bytes — 50MB cap
+  allowPrivateIPs: false        # true only for local API dev (adds security warning)
+
+# IDE Integration — Layer 4
+ide:
+  autoDetect: true              # scan package.json to detect framework
+  framework: express            # express | fastapi | django | spring | null
+  routeFile: src/routes         # where to look for route definitions
+
+# Environments to auto-load (overrides manual env setup)
+# These point to .env files in the project
+environments:
+  - name: Development
+    envFile: .env.development
+  - name: Production
+    envFile: .env.production
+    readOnly: true              # prod vars visible but not editable in UI

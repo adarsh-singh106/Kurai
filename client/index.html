@@ -1,0 +1,70 @@
+<!--
+  ──────────────────────────────────────────────────────────────────────────────
+  [client/index.html]
+
+  WHO I AM:    The HTML application shell for Kurai.
+  WHAT I OWN:  Defining the DOM container boundaries, layout slots, and loading
+               all stylesheet files and the JS bootstrap script.
+  WHAT I DON'T: Any UI rendering logic, event handlers, or dynamic states
+               (delegated to features and client/main.js).
+  WHO CALLS ME: The web browser loading the application from the server.
+  ──────────────────────────────────────────────────────────────────────────────
+-->
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kurai — API Testing Client</title>
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="styles/reset.css">
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/themes/dark.css">
+  <link rel="stylesheet" href="styles/themes/light.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/layout.css">
+</head>
+<body>
+  <div id="app" class="app-container">
+    <!-- Sidebar Panel (Layer 2) -->
+    <aside id="sidebar-container" class="sidebar">
+      <div class="sidebar-header">
+        <h2>Kurai</h2>
+      </div>
+      <div id="collections-list"></div>
+      <div id="history-list"></div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      <!-- Request Builder (Layer 1) -->
+      <section id="request-builder" class="request-builder-panel">
+        <div class="url-bar-container">
+          <select id="request-method" class="input-text">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="DELETE">DELETE</option>
+          </select>
+          <input type="text" id="request-url" class="input-text" placeholder="https://api.example.com/endpoint">
+          <button id="send-request-btn" class="btn btn-primary">Send</button>
+        </div>
+      </section>
+
+      <!-- Response Viewer (Layer 1) -->
+      <section id="response-viewer" class="response-viewer-panel">
+        <div id="response-metadata">
+          <span id="response-status" class="badge"></span>
+          <span id="response-time"></span>
+          <span id="response-size"></span>
+        </div>
+        <pre id="response-body-display"></pre>
+      </section>
+    </main>
+  </div>
+
+  <!-- Boot sequence script -->
+  <script type="module" src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,573 @@
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * [client/styles/components.css]
+ *
+ * WHO I AM:    Reusable UI component library for Kurai.
+ * WHAT I OWN:  Class selectors for buttons, inputs, badges, tabs, modals,
+ *              toasts, spinners, tooltips, context menus, collection/history
+ *              items, and utility helpers.
+ * WHAT I DON'T: Overall screen grids (→ layout.css) or colour definitions
+ *               (→ tokens.css / themes/).
+ * WHO CALLS ME: Loaded by client/index.html after tokens & themes.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  BUTTONS                                                                ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+/** Base button — no visual opinion, just shared sizing/transition. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  transition: background var(--transition-fast),
+              color var(--transition-fast),
+              transform var(--transition-fast),
+              box-shadow var(--transition-fast);
+  user-select: none;
+}
+
+/** Primary action button (Send, Save, etc.) */
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--text-on-primary);       /* WHY: token instead of hardcoded #fff */
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  TEXT INPUTS                                                            ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.input-text {
+  background: var(--bg-input, var(--bg-hover));
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  width: 100%;
+  transition: border-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.input-text:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-focus, rgba(138, 43, 226, 0.3));
+  outline: none;
+}
+
+.input-text::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  BADGES — Generic                                                       ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* ── Semantic badge modifiers ────────────────────────────────────────────── */
+.badge-success {
+  background: var(--color-success);
+  color: #fff;
+}
+
+.badge-error {
+  background: var(--color-error);
+  color: #fff;
+}
+
+.badge-warning {
+  background: var(--color-warning);
+  color: #fff;
+}
+
+.badge-info {
+  background: var(--color-info);
+  color: #fff;
+}
+
+/* ── HTTP Method Badges ──────────────────────────────────────────────────── */
+.badge-get     { background: var(--method-get);     color: #fff; }
+.badge-post    { background: var(--method-post);    color: #fff; }
+.badge-put     { background: var(--method-put);     color: #fff; }
+.badge-patch   { background: var(--method-patch);   color: #fff; }
+.badge-delete  { background: var(--method-delete);  color: #fff; }
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  STATUS BADGES — HTTP response code bands                               ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  font-family: var(--font-mono);
+  color: #fff;
+}
+
+.status-2xx { background: var(--status-2xx); }
+.status-3xx { background: var(--status-3xx); }
+.status-4xx { background: var(--status-4xx); }
+.status-5xx { background: var(--status-5xx); }
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  TABS                                                                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.tab-btn {
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-md);
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition-fast),
+              border-color var(--transition-fast);
+  cursor: pointer;
+}
+
+.tab-btn:hover {
+  color: var(--text-main);
+}
+
+.tab-btn.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+.tab-btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  SIDEBAR COMPONENTS                                                     ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;                      /* WHY: prevents header from collapsing when list is long */
+}
+
+/* ── Collection Items ────────────────────────────────────────────────────── */
+.collection-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.collection-item:hover {
+  background: var(--bg-hover);
+}
+
+.collection-item.active {
+  background: var(--bg-active);
+  color: var(--color-primary);
+}
+
+/* ── History Items ───────────────────────────────────────────────────────── */
+.history-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  transition: background var(--transition-fast);
+}
+
+.history-item:hover {
+  background: var(--bg-hover);
+}
+
+/** Method colour badge inside history rows. */
+.history-item .method-tag {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xs);
+  text-transform: uppercase;
+  min-width: 3.5em;
+  text-align: center;
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  URL BAR                                                                ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.url-bar-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  RESPONSE PANEL                                                         ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+/** Metadata row: status code, time, size */
+#response-metadata {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/** Scrollable response body container */
+#response-body-display,
+.response-body {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  background: var(--bg-app);
+  color: var(--text-main);
+  padding: var(--space-md);
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border-radius: var(--radius-md);
+  flex: 1;
+  min-height: 0;                       /* WHY: allows flex child to shrink below content size */
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  ENVIRONMENT VARIABLE EDITOR                                            ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.env-var-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) 0;
+}
+
+.env-var-row .input-text {
+  flex: 1;
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  SPINNER / LOADING                                                      ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+/** Rotating circle spinner. Size controlled by font-size of parent. */
+.spinner {
+  display: inline-block;
+  width: 1.25em;
+  height: 1.25em;
+  border: 2px solid var(--border-color);
+  border-top-color: var(--color-primary);
+  border-radius: var(--radius-full);
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/** Full-area translucent overlay with centred spinner. */
+.loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: var(--z-modal);
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  SKELETON LOADING                                                       ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-hover) 25%,
+    var(--bg-active) 50%,
+    var(--bg-hover) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes skeleton-pulse {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  TOAST NOTIFICATIONS                                                    ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.toast {
+  position: fixed;
+  bottom: var(--space-lg);
+  right: var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  color: #fff;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-toast);
+  animation: toast-in 250ms ease forwards;
+}
+
+.toast-success { border-left: 4px solid var(--color-success); }
+.toast-error   { border-left: 4px solid var(--color-error); }
+.toast-warning { border-left: 4px solid var(--color-warning); }
+.toast-info    { border-left: 4px solid var(--color-info); }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  EMPTY STATE                                                            ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  padding: var(--space-xl);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.empty-state svg,
+.empty-state img {
+  width: 64px;
+  height: 64px;
+  opacity: 0.4;
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  ERROR STATE                                                            ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl);
+  color: var(--color-error);
+  text-align: center;
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  MODAL / DIALOG                                                         ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: var(--z-modal);
+  animation: fade-in 150ms ease;
+}
+
+.modal-content {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  min-width: 360px;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  CONTEXT MENU                                                           ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.context-menu {
+  position: fixed;
+  min-width: 160px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-xs) 0;
+  box-shadow: var(--shadow-md);
+  z-index: var(--z-dropdown);
+}
+
+.context-menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-md);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.context-menu-item:hover {
+  background: var(--bg-hover);
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  TOOLTIP                                                                ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.tooltip {
+  position: absolute;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-sm);
+  background: var(--bg-active);
+  color: var(--text-main);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: var(--z-dropdown);
+  animation: fade-in 100ms ease;
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  COPY BUTTON                                                            ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.copy-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xs);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  transition: color var(--transition-fast),
+              background var(--transition-fast);
+}
+
+.copy-btn:hover {
+  color: var(--text-main);
+  background: var(--bg-hover);
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  DIVIDER                                                                ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border-color);
+  margin: var(--space-sm) 0;
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  CUSTOM SCROLLBARS (WebKit)                                             ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track, transparent);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb, #3a3a3a);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb, #3a3a3a) var(--scrollbar-track, transparent);
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  UTILITY CLASSES                                                        ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+/**
+ * Screen-reader only — visually hidden but accessible to assistive tech.
+ * WHY: Avoids display:none which removes from the a11y tree entirely.
+ */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

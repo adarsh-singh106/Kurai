@@ -1,0 +1,147 @@
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * [client/styles/reset.css]
+ *
+ * WHO I AM:    CSS resets and normalizations — the foundation layer.
+ * WHAT I OWN:  Clearing default browser margins, paddings, list-styles,
+ *              box-sizing inheritance, form control normalization, focus
+ *              accessibility outlines, and font-rendering optimisations.
+ * WHAT I DON'T: Color schemes (tokens.css), layout grids (layout.css),
+ *               or component visuals (components.css).
+ * WHO CALLS ME: Loaded by client/index.html FIRST, before all other sheets.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/* ── Box-Sizing ─────────────────────────────────────────────────────────────
+ * WHY: Inherit border-box everywhere so padding/border never blow out widths.
+ *      Using the inheritance pattern lets individual components opt out if
+ *      absolutely necessary (they never should).
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Document Root ──────────────────────────────────────────────────────────
+ * WHY: smooth scrolling improves UX for anchor jumps inside panels.
+ */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%; /* Prevent iOS text inflation */
+  text-size-adjust: 100%;
+}
+
+/* ── Body ───────────────────────────────────────────────────────────────────
+ * WHY: overflow is NOT hidden here — we only hide overflow on .app-container
+ *      (layout.css) so that body-level overlays (toasts, modals) can still
+ *      render outside the app grid.
+ *      Font-smoothing + optimizeLegibility make text crisper on macOS/Linux.
+ */
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: var(--font-body, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ── Images ─────────────────────────────────────────────────────────────────
+ * WHY: Prevent images from overflowing containers and remove the inline gap.
+ */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* ── Lists ──────────────────────────────────────────────────────────────────
+ * WHY: Remove default list bullets/numbers — Kurai uses custom list styling.
+ */
+ul,
+ol {
+  list-style: none;
+}
+
+/* ── Tables ─────────────────────────────────────────────────────────────────
+ * WHY: Collapse borders so cells share a single border instead of doubling.
+ */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* ── Form Controls ──────────────────────────────────────────────────────────
+ * WHY: Normalise font inheritance — by default, inputs/selects/textareas
+ *      do NOT inherit the page font.  We force it here globally.
+ */
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* ── Links ──────────────────────────────────────────────────────────────────
+ * WHY: Strip default link chrome.  Specific link styles live in components.
+ */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────────
+ * WHY: Remove ALL native button chrome — background, border, padding —
+ *      so .btn classes in components.css start from a clean slate.
+ *      font-size: inherit prevents the browser's smaller default button text.
+ */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* ── Focus Accessibility ────────────────────────────────────────────────────
+ * WHY: :focus-visible fires only on keyboard navigation, giving us an
+ *      accessible focus ring without the ugly outline on mouse clicks.
+ *      Uses the brand primary color for visual consistency.
+ */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-primary, #8a2be2);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm, 4px);
+}
+
+/* ── Misc Resets ────────────────────────────────────────────────────────────*/
+h1, h2, h3, h4, h5, h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+p {
+  overflow-wrap: break-word;
+}
+
+/* WHY: Remove default fieldset/legend chrome for custom form layouts. */
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+legend {
+  padding: 0;
+}

@@ -1,0 +1,200 @@
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * [client/styles/layout.css]
+ *
+ * WHO I AM:    Three-panel desktop application layout grid.
+ * WHAT I OWN:  Panel sizing, flex layout, sidebar width, responsive
+ *              breakpoints, print styles, reduced-motion overrides,
+ *              sidebar resize handle, and layout transitions.
+ * WHAT I DON'T: Colour palette (→ themes/), button designs (→ components.css).
+ * WHO CALLS ME: Loaded by client/index.html.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+/* ── Layout Custom Properties ─────────────────────────────────────────────
+ * WHY: A CSS variable for sidebar width lets JS-driven resize update a
+ *      single property instead of inline-styling widths on the element.
+ */
+:root {
+  --sidebar-width: 280px;
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  APP SHELL                                                              ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.app-container {
+  display: flex;
+  height: 100vh;                       /* fallback for older browsers */
+  height: 100dvh;                      /* WHY: dvh accounts for mobile address bars */
+  width: 100vw;
+  overflow: hidden;                    /* WHY: moved from body — only the app shell clips */
+  background: var(--bg-app);
+  color: var(--text-main);
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  SIDEBAR                                                                ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: 0;                        /* WHY: allows flex to shrink below content */
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  transition: width var(--transition-normal),
+              min-width var(--transition-normal);
+}
+
+/** Collapsed state toggled by JS. */
+.sidebar.collapsed {
+  width: 0;
+  min-width: 0;
+  border-right: none;
+  overflow: hidden;
+}
+
+/* ── Sidebar Resize Handle ───────────────────────────────────────────────
+ * WHY: Thin draggable strip on the sidebar's right edge for manual resize.
+ */
+.sidebar-resize-handle {
+  position: absolute;
+  top: 0;
+  right: -3px;
+  width: 6px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: var(--z-dropdown, 100);
+  background: transparent;
+  transition: background var(--transition-fast);
+}
+
+.sidebar-resize-handle:hover,
+.sidebar-resize-handle:active {
+  background: var(--color-primary);
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  MAIN CONTENT                                                           ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;                        /* WHY: prevents flex blowout on long URLs */
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  REQUEST BUILDER PANEL                                                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.request-builder-panel {
+  flex: 1;
+  border-bottom: 1px solid var(--border-color);
+  overflow-y: auto;
+  padding: var(--space-md);
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  RESPONSE VIEWER PANEL                                                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.response-viewer-panel {
+  flex: 0 0 40%;                       /* WHY: flex-basis instead of height — works with column flex */
+  min-height: 200px;                   /* WHY: prevents panel from collapsing to nothing */
+  overflow-y: auto;
+  padding: var(--space-md);
+  background: var(--bg-panel);
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  URL BAR CONTAINER                                                      ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.url-bar-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  RESPONSIVE BREAKPOINTS                                                 ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+/**
+ * Tablets / narrow windows — collapse sidebar by default.
+ * WHY: At ≤768 px the three-column layout leaves no room for content.
+ */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    z-index: var(--z-modal, 200);
+    transform: translateX(-100%);
+    transition: transform var(--transition-normal);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .response-viewer-panel {
+    flex: 0 0 50%;                     /* Give response more room on small screens */
+  }
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  ACCESSIBILITY — REDUCED MOTION                                         ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+/**
+ * WHY: Users who set prefers-reduced-motion should not see animations.
+ *      We zero out all transitions and animation durations globally.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PRINT STYLES                                                           ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+/**
+ * WHY: When printing API responses, hide chrome and let content reflow.
+ */
+@media print {
+  .sidebar,
+  .url-bar-container,
+  .toast {
+    display: none !important;
+  }
+
+  .app-container {
+    height: auto;
+    overflow: visible;
+  }
+
+  .main-content {
+    display: block;
+  }
+
+  .response-viewer-panel {
+    flex: none;
+    height: auto;
+    overflow: visible;
+    break-inside: avoid;
+  }
+}

@@ -1,0 +1,7 @@
+node_modules
+.git
+.agents
+.env
+.kurai/data
+client/storage/local*
+*.log

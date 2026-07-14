@@ -1,0 +1,77 @@
+/**
+ * ─────────────────────────────────────────────────────────────────────────────
+ * [client/styles/themes/light.css]
+ *
+ * WHO I AM:    Light mode theme colour overrides.
+ * WHAT I OWN:  Overriding every colour custom property declared in tokens.css
+ *              to implement the light appearance.
+ * WHAT I DON'T: Positional layouts, typography sizes, or component structure.
+ * WHO CALLS ME: Activated by setting [data-theme="light"] on <html>.
+ * ─────────────────────────────────────────────────────────────────────────────
+ */
+
+[data-theme="light"] {
+  /* ── Brand Colours ────────────────────────────────────────────────────── */
+  --color-primary: #6200ee;
+  --color-primary-hover: #7c4dff;      /* WHY: lighter variant for visible hover on white bg */
+  --color-primary-active: #5600d1;
+  --color-primary-focus: rgba(98, 0, 238, 0.25);
+  --text-on-primary: #ffffff;
+
+  /* ── Backgrounds ────────────────────────────────────────────────────── */
+  --bg-app: #f5f5f7;
+  --bg-panel: #ffffff;
+  --bg-sidebar: #ededf0;
+  --bg-hover: #eaeaea;
+  --bg-active: #dfdfdf;
+  --bg-input: #f0f0f2;                 /* WHY: slightly tinted so inputs are distinguishable */
+
+  /* ── Borders ────────────────────────────────────────────────────────── */
+  --border-color: #dddddd;
+
+  /* ── Typography ─────────────────────────────────────────────────────── */
+  --text-main: #202124;
+  --text-muted: #595959;               /* WHY: darkened from #666 → #595959 for WCAG AA */
+  --text-link: #6200ee;
+
+  /* ── Semantic Colours ───────────────────────────────────────────────── */
+  --color-success: #2e7d32;
+  --color-warning: #e65100;
+  --color-error: #c62828;
+  --color-info: #1565c0;
+
+  /* ── Legacy Status Aliases ──────────────────────────────────────────── */
+  --status-success: #1b873f;
+  --status-error: #d93025;
+  --status-warning: #e37400;
+  --status-info: #1a73e8;
+
+  /* ── HTTP Method Colours ────────────────────────────────────────────── */
+  --method-get: #2e7d32;
+  --method-post: #e65100;
+  --method-put: #1565c0;
+  --method-patch: #7b1fa2;
+  --method-delete: #c62828;
+  --method-head: #455a64;
+  --method-options: #5d4037;
+
+  /* ── HTTP Status-Code Bands ─────────────────────────────────────────── */
+  --status-2xx: #2e7d32;
+  --status-3xx: #1565c0;
+  --status-4xx: #e65100;
+  --status-5xx: #c62828;
+
+  /* ── Scrollbar ──────────────────────────────────────────────────────── */
+  --scrollbar-thumb: #c0c0c0;
+  --scrollbar-track: transparent;
+
+  /* ── Selection ──────────────────────────────────────────────────────── */
+  --selection-bg: rgba(98, 0, 238, 0.2);
+  --selection-text: #000000;
+}
+
+/* ── Text Selection Styling ───────────────────────────────────────────────*/
+[data-theme="light"] ::selection {
+  background: var(--selection-bg);
+  color: var(--selection-text);
+}

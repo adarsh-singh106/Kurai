@@ -1,0 +1,18 @@
+# docker-compose.dev.yml
+#
+# Dev override configuration to run Kurai in hot-reloading mode with local volume mounts.
+# Run with: docker compose -f docker/docker-compose.yml -f docker/docker-compose.dev.yml up
+
+version: "3.9"
+
+services:
+  kurai:
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - STORAGE_BACKEND=file
+    volumes:
+      - ../:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
