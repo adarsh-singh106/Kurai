@@ -23,6 +23,7 @@ import historyStorage from './features/history/historyStorage.js';
 import requestService from './features/request/requestService.js';
 import state from './core/state.js';
 import eventBus from './core/eventBus.js';
+import commandPalette from './features/layout/commandPalette.js';
 
 console.log('[kurai] Initializing boot sequence...');
 
@@ -116,6 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     environmentView.init();
     historyView.init();
     layoutView.init();
+    commandPalette.init();
 
     console.log('[kurai] Features initialized.');
 

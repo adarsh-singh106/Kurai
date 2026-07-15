@@ -17,6 +17,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="dark light">
   <title>Kurai — API Testing Client</title>
+  <meta name="description" content="Kurai is a lightweight, keyboard-first API testing client for developers. Send HTTP requests, manage collections, and debug APIs with speed.">
+  <meta name="theme-color" content="#09090e">
 
   <!-- Typography: Inter for UI, JetBrains Mono for code panes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -283,6 +285,22 @@
       </main>
     </div>
 
+    <!-- ══════════════ Command Palette ══════════════ -->
+    <div id="command-palette" class="command-palette-overlay" hidden>
+      <div class="command-palette">
+        <div class="command-palette-input-wrap">
+          <svg class="command-palette-search-icon" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <circle cx="7" cy="7" r="4.5"/><line x1="10.5" y1="10.5" x2="14" y2="14"/>
+          </svg>
+          <input type="text" id="command-palette-input" class="command-palette-input"
+                 placeholder="Type a command…" autocomplete="off" spellcheck="false"
+                 aria-label="Command palette">
+          <kbd class="command-palette-shortcut">esc</kbd>
+        </div>
+        <div id="command-palette-results" class="command-palette-results"></div>
+      </div>
+    </div>
+
     <!-- ══════════════ Status Bar ══════════════ -->
     <footer class="status-bar">
       <div class="status-bar-left">
@@ -290,7 +308,9 @@
         <span id="connection-status">Connected</span>
       </div>
       <div class="status-bar-right">
+        <span class="status-hint"><kbd>Ctrl</kbd>+<kbd>K</kbd> Commands</span>
         <span class="status-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> Send</span>
+        <span class="status-hint"><kbd>Ctrl</kbd>+<kbd>L</kbd> URL</span>
         <span class="status-version">Kurai v1.0</span>
       </div>
     </footer>

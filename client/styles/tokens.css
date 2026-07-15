@@ -43,6 +43,11 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
+  /* ── Typography — Line Heights ──────────────────────────────────────────*/
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.65;
+
   /* ── Typography — Letter Spacing ────────────────────────────────────────
    * WHY: Slight negative tracking on headings and slight positive tracking
    *      on all-caps labels is the signature of modern SaaS typography.
@@ -104,8 +109,12 @@
   --transition-slow: 350ms cubic-bezier(0.25, 1, 0.5, 1);
   --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
+  /* ── Focus ──────────────────────────────────────────────────────────────*/
+  --focus-ring: 0 0 0 2px var(--bg-app), 0 0 0 4px var(--color-primary);
+
   /* ── Opacity ────────────────────────────────────────────────────────────*/
   --opacity-disabled: 0.45;
+  --overlay-bg: rgba(0, 0, 0, 0.6);
 
   /* ══════════════════════════════════════════════════════════════════════
    * FALLBACK COLOURS (dark-theme defaults)
@@ -207,7 +216,7 @@
   --syntax-punct: #55555f;
 
   /* ── Scrollbar ──────────────────────────────────────────────────────────*/
-  --scrollbar-thumb: rgba(255, 255, 255, 0.12);
+  --scrollbar-thumb: rgba(255, 255, 255, 0.10);
   --scrollbar-track: transparent;
 
   /* ── Selection ──────────────────────────────────────────────────────────*/

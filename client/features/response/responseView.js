@@ -293,6 +293,26 @@ const responseView = {
       setLoadingBar(isLoading);
     });
 
+    // Clear command — resets response panel to the empty state.
+    eventBus.on('response:clear', () => {
+      lastResponse = null;
+      const { status, time, size, body, headers, cookies, tests, empty, copyBtn, modeTabs, preview } = els();
+      if (status) status.hidden = true;
+      if (time) time.hidden = true;
+      if (size) size.hidden = true;
+      if (copyBtn) copyBtn.hidden = true;
+      if (body) { body.hidden = true; body.innerHTML = ''; }
+      if (headers) { headers.hidden = true; headers.innerHTML = ''; }
+      if (cookies) { cookies.hidden = true; cookies.innerHTML = ''; }
+      if (tests) { tests.hidden = true; tests.innerHTML = ''; }
+      if (preview) preview.hidden = true;
+      if (modeTabs) modeTabs.hidden = true;
+      if (empty) empty.hidden = false;
+      setBadge('rtab-count-headers', null);
+      setBadge('rtab-count-cookies', null);
+      setBadge('rtab-count-tests', null);
+    });
+
     // ── Response view tabs ─────────────────────────────────────────────
     document.querySelectorAll('.response-tab[data-rtab]').forEach(btn => {
       btn.addEventListener('click', () => {
