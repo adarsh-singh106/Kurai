@@ -2,7 +2,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * [client/styles/layout.css]
  *
- * WHO I AM:    Three-panel desktop application layout grid.
+ * WHO I AM:    Application shell layout — header, sidebar, workspace, status bar.
  * WHAT I OWN:  Panel sizing, flex layout, sidebar width, responsive
  *              breakpoints, print styles, reduced-motion overrides,
  *              sidebar resize handle, and layout transitions.
@@ -16,7 +16,9 @@
  *      single property instead of inline-styling widths on the element.
  */
 :root {
-  --sidebar-width: 280px;
+  --sidebar-width: 272px;
+  --header-height: 52px;
+  --statusbar-height: 28px;
 }
 
 /* ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -25,12 +27,122 @@
 
 .app-container {
   display: flex;
+  flex-direction: column;
   height: 100vh;                       /* fallback for older browsers */
   height: 100dvh;                      /* WHY: dvh accounts for mobile address bars */
   width: 100vw;
   overflow: hidden;                    /* WHY: moved from body — only the app shell clips */
   background: var(--bg-app);
   color: var(--text-main);
+}
+
+/* ── Ambient brand glow ───────────────────────────────────────────────────
+ * WHY: A faint radial violet wash behind the whole app gives depth without
+ *      distracting from content — the signature "premium dark" backdrop.
+ */
+.app-container::before {
+  content: "";
+  position: fixed;
+  top: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90vw;
+  height: 60vh;
+  background: radial-gradient(ellipse at center,
+              rgba(139, 92, 246, 0.07) 0%,
+              transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="light"] .app-container::before {
+  background: radial-gradient(ellipse at center,
+              rgba(124, 58, 237, 0.05) 0%,
+              transparent 70%);
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  HEADER BAR                                                             ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  height: var(--header-height);
+  flex-shrink: 0;
+  padding: 0 var(--space-md);
+  background: var(--bg-header);
+  backdrop-filter: blur(12px);         /* WHY: glassmorphism over the ambient glow */
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+  z-index: 1;
+}
+
+.header-left,
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-width: 0;
+}
+
+/* ── Brand lockup ────────────────────────────────────────────────────────── */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  background: var(--gradient-brand);
+  box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4);
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;                  /* fallback if clip unsupported it stays readable via text-fill */
+}
+
+.brand-tag {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--text-faint);
+  padding: 2px 6px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+}
+
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  APP BODY — sidebar + workspace row                                     ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝ */
+
+.app-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;                       /* WHY: allows children to scroll instead of overflowing */
+  position: relative;
+  z-index: 1;
 }
 
 /* ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -40,11 +152,12 @@
 .sidebar {
   width: var(--sidebar-width);
   min-width: 0;                        /* WHY: allows flex to shrink below content */
+  flex-shrink: 0;
   background: var(--bg-sidebar);
   border-right: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
+  overflow: hidden;
   transition: width var(--transition-normal),
               min-width var(--transition-normal);
 }
@@ -55,6 +168,32 @@
   min-width: 0;
   border-right: none;
   overflow: hidden;
+}
+
+/* ── Sidebar panels host ─────────────────────────────────────────────────── */
+.sidebar-panels {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-panel {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  padding: var(--space-sm);
+  display: none;
+}
+
+.sidebar-panel.active {
+  display: block;
+  animation: panel-in 200ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Sidebar Resize Handle ───────────────────────────────────────────────
@@ -86,6 +225,8 @@
   display: flex;
   flex-direction: column;
   min-width: 0;                        /* WHY: prevents flex blowout on long URLs */
+  padding: var(--space-sm);
+  gap: var(--space-sm);
 }
 
 /* ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -94,9 +235,20 @@
 
 .request-builder-panel {
   flex: 1;
-  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;                    /* WHY: clips tab panels to the rounded card */
+}
+
+.request-tab-panels {
+  flex: 1;
+  min-height: 0;
+  position: relative;
   overflow-y: auto;
-  padding: var(--space-md);
 }
 
 /* ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -104,21 +256,81 @@
  * ╚═══════════════════════════════════════════════════════════════════════════╝ */
 
 .response-viewer-panel {
-  flex: 0 0 40%;                       /* WHY: flex-basis instead of height — works with column flex */
+  flex: 0 0 42%;                       /* WHY: flex-basis instead of height — works with column flex */
   min-height: 200px;                   /* WHY: prevents panel from collapsing to nothing */
-  overflow-y: auto;
-  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
   background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.response-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 /* ╔═══════════════════════════════════════════════════════════════════════════╗
- * ║  URL BAR CONTAINER                                                      ║
+ * ║  STATUS BAR                                                             ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝ */
 
-.url-bar-container {
+.status-bar {
   display: flex;
   align-items: center;
-  gap: var(--space-sm);
+  justify-content: space-between;
+  height: var(--statusbar-height);
+  flex-shrink: 0;
+  padding: 0 var(--space-md);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  background: var(--bg-sidebar);
+  border-top: 1px solid var(--border-color);
+  position: relative;
+  z-index: 1;
+  user-select: none;
+}
+
+.status-bar-left,
+.status-bar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/** Pulsing green connectivity dot. */
+.status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: var(--space-xs);
+  border-radius: var(--radius-full);
+  background: var(--color-success);
+  box-shadow: 0 0 6px var(--color-success);
+  animation: status-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.45; }
+}
+
+.status-hint kbd {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xs);
+  padding: 1px 5px;
+  border: 1px solid var(--border-color);
+  border-bottom-width: 2px;
+  border-radius: var(--radius-xs);
+  background: var(--bg-panel-raised);
+  color: var(--text-muted);
+}
+
+.status-version {
+  color: var(--text-faint);
 }
 
 /* ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -126,18 +338,19 @@
  * ╚═══════════════════════════════════════════════════════════════════════════╝ */
 
 /**
- * Tablets / narrow windows — collapse sidebar by default.
- * WHY: At ≤768 px the three-column layout leaves no room for content.
+ * Tablets / narrow windows — sidebar becomes an overlay drawer.
+ * WHY: At ≤768 px the multi-column layout leaves no room for content.
  */
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;
-    top: 0;
+    top: var(--header-height);
     left: 0;
-    height: 100%;
+    height: calc(100% - var(--header-height) - var(--statusbar-height));
     z-index: var(--z-modal, 200);
     transform: translateX(-100%);
     transition: transform var(--transition-normal);
+    box-shadow: var(--shadow-lg);
   }
 
   .sidebar.open {
@@ -146,6 +359,11 @@
 
   .response-viewer-panel {
     flex: 0 0 50%;                     /* Give response more room on small screens */
+  }
+
+  .brand-tag,
+  .status-hint {
+    display: none;                     /* WHY: reclaim horizontal space on phones */
   }
 }
 
@@ -176,8 +394,10 @@
  * WHY: When printing API responses, hide chrome and let content reflow.
  */
 @media print {
+  .app-header,
   .sidebar,
   .url-bar-container,
+  .status-bar,
   .toast {
     display: none !important;
   }
@@ -196,5 +416,6 @@
     height: auto;
     overflow: visible;
     break-inside: avoid;
+    border: none;
   }
 }

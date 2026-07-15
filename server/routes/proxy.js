@@ -18,11 +18,14 @@ import { forwardRequest } from '../services/proxyEngine.js';
 const router = Router();
 
 // Schema or schema-like validation logic (to be parsed by validate middleware)
+// WHY headers is 'object': the client (network/requestBuilder.js) compiles
+// headers into a {key: value} map, and proxyEngine iterates Object.entries().
+// WHY body is 'string': the client sends body.content verbatim (raw text/JSON).
 const proxySchema = {
   url: 'required|string',
   method: 'required|string',
-  headers: 'optional|array',
-  body: 'optional|object'
+  headers: 'optional|object',
+  body: 'optional|string'
 };
 
 // WHY we return a standard envelope { ok: true/false, data/error }:

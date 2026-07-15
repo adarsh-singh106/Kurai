@@ -15,8 +15,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark light">
   <title>Kurai — API Testing Client</title>
-  
+
+  <!-- Typography: Inter for UI, JetBrains Mono for code panes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="styles/reset.css">
   <link rel="stylesheet" href="styles/tokens.css">
@@ -24,44 +30,218 @@
   <link rel="stylesheet" href="styles/themes/light.css">
   <link rel="stylesheet" href="styles/components.css">
   <link rel="stylesheet" href="styles/layout.css">
+
+  <!-- Favicon: inline SVG bolt on brand gradient -->
+  <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="%238b5cf6"/><stop offset="1" stop-color="%236366f1"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(%23g)"/><path d="M17.5 6L10 18h5l-1.5 8L21 14h-5l1.5-8z" fill="white"/></svg>'>
 </head>
 <body>
   <div id="app" class="app-container">
-    <!-- Sidebar Panel (Layer 2) -->
-    <aside id="sidebar-container" class="sidebar">
-      <div class="sidebar-header">
-        <h2>Kurai</h2>
+
+    <!-- ══════════════ Top Header Bar ══════════════ -->
+    <header class="app-header">
+      <div class="header-left">
+        <button id="sidebar-toggle-btn" class="icon-btn" title="Toggle sidebar" aria-label="Toggle sidebar">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <rect x="1.5" y="2.5" width="13" height="11" rx="2"/><line x1="6" y1="2.5" x2="6" y2="13.5"/>
+          </svg>
+        </button>
+        <a class="brand" href="#" aria-label="Kurai home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 32 32" fill="none">
+              <path d="M17.5 6L10 18h5l-1.5 8L21 14h-5l1.5-8z" fill="white"/>
+            </svg>
+          </span>
+          <span class="brand-name">Kurai</span>
+          <span class="brand-tag">API Studio</span>
+        </a>
       </div>
-      <div id="collections-list"></div>
-      <div id="history-list"></div>
-    </aside>
 
-    <!-- Main Workspace -->
-    <main class="main-content">
-      <!-- Request Builder (Layer 1) -->
-      <section id="request-builder" class="request-builder-panel">
-        <div class="url-bar-container">
-          <select id="request-method" class="input-text">
-            <option value="GET">GET</option>
-            <option value="POST">POST</option>
-            <option value="PUT">PUT</option>
-            <option value="DELETE">DELETE</option>
+      <div class="header-right">
+        <div class="env-select-wrap" title="Active environment">
+          <svg class="env-select-icon" width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <circle cx="8" cy="8" r="6.5"/><path d="M1.5 8h13M8 1.5c-4.5 4.5-4.5 8.5 0 13M8 1.5c4.5 4.5 4.5 8.5 0 13"/>
+          </svg>
+          <select id="environment-selector" class="env-select" aria-label="Active environment">
+            <option value="">No Environment</option>
           </select>
-          <input type="text" id="request-url" class="input-text" placeholder="https://api.example.com/endpoint">
-          <button id="send-request-btn" class="btn btn-primary">Send</button>
         </div>
-      </section>
+        <button id="theme-toggle-btn" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">
+          <!-- moon (shown in dark mode) -->
+          <svg class="icon-moon" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13.5 9.5A6 6 0 0 1 6.5 2.5a6 6 0 1 0 7 7z"/>
+          </svg>
+          <!-- sun (shown in light mode) -->
+          <svg class="icon-sun" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <circle cx="8" cy="8" r="3.25"/>
+            <path d="M8 1v1.5M8 13.5V15M15 8h-1.5M2.5 8H1M12.95 3.05l-1.06 1.06M4.11 11.89l-1.06 1.06M12.95 12.95l-1.06-1.06M4.11 4.11L3.05 3.05"/>
+          </svg>
+        </button>
+      </div>
+    </header>
 
-      <!-- Response Viewer (Layer 1) -->
-      <section id="response-viewer" class="response-viewer-panel">
-        <div id="response-metadata">
-          <span id="response-status" class="badge"></span>
-          <span id="response-time"></span>
-          <span id="response-size"></span>
+    <!-- ══════════════ Body: Sidebar + Workspace ══════════════ -->
+    <div class="app-body">
+
+      <!-- Sidebar Panel (Layer 2) -->
+      <aside id="sidebar-container" class="sidebar">
+        <nav class="sidebar-tabs" role="tablist" aria-label="Sidebar sections">
+          <button class="sidebar-tab active" data-panel="collections" role="tab" aria-selected="true">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1.5 4.5a2 2 0 0 1 2-2h2.6l1.6 2h4.8a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2v-7z"/>
+            </svg>
+            Collections
+          </button>
+          <button class="sidebar-tab" data-panel="history" role="tab" aria-selected="false">
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="8" cy="8" r="6.5"/><path d="M8 4.5V8l2.5 1.5"/>
+            </svg>
+            History
+          </button>
+        </nav>
+
+        <div class="sidebar-search">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+            <circle cx="7" cy="7" r="4.5"/><line x1="10.5" y1="10.5" x2="14" y2="14"/>
+          </svg>
+          <input type="text" id="sidebar-search-input" placeholder="Search requests…" aria-label="Search requests">
         </div>
-        <pre id="response-body-display"></pre>
-      </section>
-    </main>
+
+        <div class="sidebar-panels">
+          <div id="collections-list" class="sidebar-panel active" role="tabpanel"></div>
+          <div id="history-list" class="sidebar-panel" role="tabpanel"></div>
+        </div>
+      </aside>
+
+      <!-- Main Workspace -->
+      <main class="main-content">
+
+        <!-- Request Builder (Layer 1) -->
+        <section id="request-builder" class="request-builder-panel">
+          <div class="url-bar-container">
+            <div class="method-select-wrap">
+              <select id="request-method" class="method-select" aria-label="HTTP method" data-method="GET">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="PATCH">PATCH</option>
+                <option value="DELETE">DELETE</option>
+                <option value="HEAD">HEAD</option>
+                <option value="OPTIONS">OPTIONS</option>
+              </select>
+            </div>
+            <input type="text" id="request-url" class="url-input" placeholder="https://api.example.com/endpoint  —  use {{variables}}"
+                   spellcheck="false" autocomplete="off" aria-label="Request URL">
+            <button id="send-request-btn" class="btn btn-send">
+              <span class="btn-send-label">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M1.72 1.22a.75.75 0 0 1 .8-.13l12 5.5a.75.75 0 0 1 0 1.37l-12 5.5A.75.75 0 0 1 1.5 12.8L3.06 8 1.5 3.2a.75.75 0 0 1 .22-1.98zM4.4 8.75l-1.05 3.24L12.35 8 3.35 4l1.05 3.25H8a.75.75 0 0 1 0 1.5H4.4z"/>
+                </svg>
+                Send
+              </span>
+              <span class="btn-send-spinner spinner" hidden></span>
+            </button>
+          </div>
+
+          <!-- Request Config Tabs -->
+          <nav class="request-tabs" role="tablist" aria-label="Request configuration">
+            <button class="tab-btn active" data-tab="params" role="tab" aria-selected="true">Params <span class="tab-count" data-count-for="params" hidden></span></button>
+            <button class="tab-btn" data-tab="headers" role="tab" aria-selected="false">Headers <span class="tab-count" data-count-for="headers" hidden></span></button>
+            <button class="tab-btn" data-tab="body" role="tab" aria-selected="false">Body</button>
+            <button class="tab-btn" data-tab="auth" role="tab" aria-selected="false">Auth</button>
+          </nav>
+
+          <div class="request-tab-panels">
+            <div id="tab-panel-params" class="tab-panel active" role="tabpanel">
+              <div class="kv-editor" id="params-editor"></div>
+            </div>
+            <div id="tab-panel-headers" class="tab-panel" role="tabpanel">
+              <div class="kv-editor" id="headers-editor"></div>
+            </div>
+            <div id="tab-panel-body" class="tab-panel" role="tabpanel">
+              <div class="body-type-row">
+                <label class="body-type-option"><input type="radio" name="body-type" value="none" checked><span>None</span></label>
+                <label class="body-type-option"><input type="radio" name="body-type" value="json"><span>JSON</span></label>
+                <label class="body-type-option"><input type="radio" name="body-type" value="text"><span>Text</span></label>
+              </div>
+              <textarea id="request-body-input" class="code-textarea" placeholder='{ "key": "value" }'
+                        spellcheck="false" aria-label="Request body" hidden></textarea>
+              <div id="body-none-hint" class="panel-hint">This request has no body.</div>
+            </div>
+            <div id="tab-panel-auth" class="tab-panel" role="tabpanel">
+              <div class="auth-row">
+                <label class="field-label" for="auth-type-select">Type</label>
+                <select id="auth-type-select" class="input-text auth-type-select" aria-label="Auth type">
+                  <option value="inherit">No Auth</option>
+                  <option value="bearer">Bearer Token</option>
+                  <option value="basic">Basic Auth</option>
+                </select>
+              </div>
+              <div id="auth-bearer-fields" class="auth-fields" hidden>
+                <label class="field-label" for="auth-bearer-token">Token</label>
+                <input type="password" id="auth-bearer-token" class="input-text" placeholder="Paste token…" autocomplete="off">
+              </div>
+              <div id="auth-basic-fields" class="auth-fields" hidden>
+                <label class="field-label" for="auth-basic-username">Username</label>
+                <input type="text" id="auth-basic-username" class="input-text" placeholder="Username" autocomplete="off">
+                <label class="field-label" for="auth-basic-password">Password</label>
+                <input type="password" id="auth-basic-password" class="input-text" placeholder="Password" autocomplete="off">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Response Viewer (Layer 1) -->
+        <section id="response-viewer" class="response-viewer-panel">
+          <div id="response-metadata" class="response-metadata">
+            <div class="response-meta-left">
+              <span class="response-title">Response</span>
+              <span id="response-status" class="status-pill" hidden></span>
+              <span id="response-time" class="meta-chip" hidden></span>
+              <span id="response-size" class="meta-chip" hidden></span>
+            </div>
+            <div class="response-meta-right">
+              <nav class="response-tabs" role="tablist" aria-label="Response views">
+                <button class="response-tab active" data-rtab="body" role="tab" aria-selected="true">Body</button>
+                <button class="response-tab" data-rtab="headers" role="tab" aria-selected="false">Headers</button>
+              </nav>
+              <button id="copy-response-btn" class="icon-btn" title="Copy response body" aria-label="Copy response body" hidden>
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+                  <rect x="5.5" y="5.5" width="9" height="9" rx="1.5"/><path d="M10.5 5.5v-3a1 1 0 0 0-1-1h-7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="response-content">
+            <!-- Empty state shown before any request has been sent -->
+            <div id="response-empty-state" class="response-empty">
+              <div class="response-empty-orb" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M9.5 1L3 9.5h4l-1 5.5L12.5 6.5h-4l1-5.5z"/>
+                </svg>
+              </div>
+              <p class="response-empty-title">Ready when you are</p>
+              <p class="response-empty-hint">Enter a URL and hit <kbd>Ctrl</kbd> + <kbd>Enter</kbd> to send your first request</p>
+            </div>
+
+            <pre id="response-body-display" class="response-body" hidden></pre>
+            <div id="response-headers-display" class="response-headers" hidden></div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- ══════════════ Status Bar ══════════════ -->
+    <footer class="status-bar">
+      <div class="status-bar-left">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span id="connection-status">Connected</span>
+      </div>
+      <div class="status-bar-right">
+        <span class="status-hint"><kbd>Ctrl</kbd>+<kbd>Enter</kbd> Send</span>
+        <span class="status-version">Kurai v1.0</span>
+      </div>
+    </footer>
   </div>
 
   <!-- Boot sequence script -->

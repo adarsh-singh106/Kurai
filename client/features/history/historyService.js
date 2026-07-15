@@ -27,7 +27,9 @@ const historyService = {
 
   clearHistory: async () => {
     await historyStorage.clear();
-    state.addToHistory([]);
+    // WHY clearHistory not addToHistory([]): addToHistory would push an
+    // empty-array *entry* onto the stack instead of emptying it.
+    state.clearHistory();
   }
 };
 

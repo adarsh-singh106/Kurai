@@ -24,9 +24,13 @@ import { logger } from './logger.js';
  */
 const HTTP_ERROR_CODES = {
   400: 'BAD_REQUEST',
+  403: 'FORBIDDEN',
   404: 'NOT_FOUND',
+  413: 'PAYLOAD_TOO_LARGE',
   422: 'UNPROCESSABLE_ENTITY',
-  429: 'RATE_LIMITED'
+  429: 'RATE_LIMITED',
+  502: 'BAD_GATEWAY',
+  504: 'GATEWAY_TIMEOUT'
 };
 
 /**

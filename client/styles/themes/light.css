@@ -12,62 +12,106 @@
 
 [data-theme="light"] {
   /* ── Brand Colours ────────────────────────────────────────────────────── */
-  --color-primary: #6200ee;
-  --color-primary-hover: #7c4dff;      /* WHY: lighter variant for visible hover on white bg */
-  --color-primary-active: #5600d1;
-  --color-primary-focus: rgba(98, 0, 238, 0.25);
+  --color-primary: #7c3aed;
+  --color-primary-hover: #8b5cf6;
+  --color-primary-active: #6d28d9;
+  --color-primary-focus: rgba(124, 58, 237, 0.22);
+  --color-primary-soft: rgba(124, 58, 237, 0.08);
   --text-on-primary: #ffffff;
 
-  /* ── Backgrounds ────────────────────────────────────────────────────── */
-  --bg-app: #f5f5f7;
+  --gradient-brand: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
+  --gradient-brand-hover: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  --gradient-text: linear-gradient(90deg, #7c3aed 0%, #4f46e5 100%);
+
+  /* ── Backgrounds ──────────────────────────────────────────────────────
+   * WHY cool-tinted whites: matches the blue-tinted dark ramp so switching
+   *      themes feels like the same product, not two different apps.
+   */
+  --bg-app: #f7f7fa;
   --bg-panel: #ffffff;
-  --bg-sidebar: #ededf0;
-  --bg-hover: #eaeaea;
-  --bg-active: #dfdfdf;
-  --bg-input: #f0f0f2;                 /* WHY: slightly tinted so inputs are distinguishable */
+  --bg-panel-raised: #ffffff;
+  --bg-sidebar: #f2f2f7;
+  --bg-header: rgba(255, 255, 255, 0.85);
+  --bg-hover: rgba(15, 15, 35, 0.045);
+  --bg-active: rgba(124, 58, 237, 0.09);
+  --bg-input: #ffffff;
+  --bg-code: #f7f7fa;
 
   /* ── Borders ────────────────────────────────────────────────────────── */
-  --border-color: #dddddd;
+  --border-color: rgba(15, 15, 35, 0.08);
+  --border-strong: rgba(15, 15, 35, 0.14);
+
+  /* ── Shadows ────────────────────────────────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(15, 15, 35, 0.06), 0 1px 3px rgba(15, 15, 35, 0.05);
+  --shadow-md: 0 2px 4px rgba(15, 15, 35, 0.06), 0 8px 24px rgba(15, 15, 35, 0.08);
+  --shadow-lg: 0 4px 8px rgba(15, 15, 35, 0.08), 0 16px 48px rgba(15, 15, 35, 0.12);
+  --shadow-glow: 0 0 0 1px rgba(124, 58, 237, 0.25),
+                 0 2px 12px rgba(124, 58, 237, 0.25),
+                 0 8px 32px rgba(124, 58, 237, 0.15);
 
   /* ── Typography ─────────────────────────────────────────────────────── */
-  --text-main: #202124;
-  --text-muted: #595959;               /* WHY: darkened from #666 → #595959 for WCAG AA */
-  --text-link: #6200ee;
+  --text-main: #17171f;
+  --text-muted: #5d5d6b;
+  --text-faint: #9c9ca8;
+  --text-link: #7c3aed;
 
   /* ── Semantic Colours ───────────────────────────────────────────────── */
-  --color-success: #2e7d32;
-  --color-warning: #e65100;
-  --color-error: #c62828;
-  --color-info: #1565c0;
+  --color-success: #059669;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
+  --color-info: #2563eb;
+  --color-success-soft: rgba(5, 150, 105, 0.1);
+  --color-warning-soft: rgba(217, 119, 6, 0.1);
+  --color-error-soft: rgba(220, 38, 38, 0.1);
+  --color-info-soft: rgba(37, 99, 235, 0.1);
 
   /* ── Legacy Status Aliases ──────────────────────────────────────────── */
-  --status-success: #1b873f;
-  --status-error: #d93025;
-  --status-warning: #e37400;
-  --status-info: #1a73e8;
+  --status-success: #059669;
+  --status-error: #dc2626;
+  --status-warning: #d97706;
+  --status-info: #2563eb;
 
   /* ── HTTP Method Colours ────────────────────────────────────────────── */
-  --method-get: #2e7d32;
-  --method-post: #e65100;
-  --method-put: #1565c0;
-  --method-patch: #7b1fa2;
-  --method-delete: #c62828;
-  --method-head: #455a64;
-  --method-options: #5d4037;
+  --method-get: #059669;
+  --method-post: #d97706;
+  --method-put: #2563eb;
+  --method-patch: #9333ea;
+  --method-delete: #dc2626;
+  --method-head: #475569;
+  --method-options: #57534e;
+  --method-get-soft: rgba(5, 150, 105, 0.1);
+  --method-post-soft: rgba(217, 119, 6, 0.1);
+  --method-put-soft: rgba(37, 99, 235, 0.1);
+  --method-patch-soft: rgba(147, 51, 234, 0.1);
+  --method-delete-soft: rgba(220, 38, 38, 0.1);
+  --method-head-soft: rgba(71, 85, 105, 0.1);
+  --method-options-soft: rgba(87, 83, 78, 0.1);
 
   /* ── HTTP Status-Code Bands ─────────────────────────────────────────── */
-  --status-2xx: #2e7d32;
-  --status-3xx: #1565c0;
-  --status-4xx: #e65100;
-  --status-5xx: #c62828;
+  --status-2xx: #059669;
+  --status-3xx: #2563eb;
+  --status-4xx: #d97706;
+  --status-5xx: #dc2626;
+  --status-2xx-soft: rgba(5, 150, 105, 0.1);
+  --status-3xx-soft: rgba(37, 99, 235, 0.1);
+  --status-4xx-soft: rgba(217, 119, 6, 0.1);
+  --status-5xx-soft: rgba(220, 38, 38, 0.1);
+
+  /* ── JSON Syntax Highlighting ───────────────────────────────────────── */
+  --syntax-key: #7c3aed;
+  --syntax-string: #059669;
+  --syntax-number: #d97706;
+  --syntax-boolean: #2563eb;
+  --syntax-null: #dc2626;
+  --syntax-punct: #9c9ca8;
 
   /* ── Scrollbar ──────────────────────────────────────────────────────── */
-  --scrollbar-thumb: #c0c0c0;
+  --scrollbar-thumb: rgba(15, 15, 35, 0.18);
   --scrollbar-track: transparent;
 
   /* ── Selection ──────────────────────────────────────────────────────── */
-  --selection-bg: rgba(98, 0, 238, 0.2);
-  --selection-text: #000000;
+  --selection-bg: rgba(124, 58, 237, 0.18);
+  --selection-text: #17171f;
 }
 
 /* ── Text Selection Styling ───────────────────────────────────────────────*/

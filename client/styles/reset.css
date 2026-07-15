@@ -125,6 +125,15 @@ button:focus-visible {
   border-radius: var(--radius-sm, 4px);
 }
 
+/* ── Hidden Attribute ────────────────────────────────────────────────────────
+ * WHY !important: component classes set explicit `display` values (flex,
+ *      inline-flex…) which silently defeat the [hidden] attribute's default
+ *      display:none. This guarantees hidden always means hidden.
+ */
+[hidden] {
+  display: none !important;
+}
+
 /* ── Misc Resets ────────────────────────────────────────────────────────────*/
 h1, h2, h3, h4, h5, h6 {
   font-size: inherit;
