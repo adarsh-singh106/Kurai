@@ -101,27 +101,36 @@ Every sent request is logged automatically — no opt-in, no cloud sync consent 
 
 ### 6. Scriptable Tests (`kurai.test()`)
 
-Postman-style assertions without a proprietary runtime.
+Postman-style assertions without a proprietary runtime. Write them in the request's **Tests** tab; results appear in the response's **Test Results** tab with pass/fail counts.
 
 ```js
 kurai.test("status is 200", () => {
   kurai.expect(response.status).toBe(200);
 });
 
-kurai.variables.set("authToken", response.body.token);
+kurai.test("fast enough", () => {
+  kurai.expect(response.time).toBeLessThan(500);
+});
+
+// response.json is the parsed body (null if not JSON)
+kurai.variables.set("authToken", response.json.token);
 ```
 
-- Runs in **Node's `vm` sandbox** — no filesystem, no network, no `process` access, hard 1-second timeout. A malicious or runaway script cannot touch the host.
+- Runs in **Node's `vm` sandbox** — no filesystem, no network, no `process` access, hard 1-second timeout. A malicious or runaway script cannot touch the host, and a broken script never loses the HTTP response.
+- **`response` context**: `{ status, statusText, headers, body, json, time, size }`.
 - `kurai.test(name, fn)` collects pass/fail results with error messages.
-- `kurai.expect(value).toBe() / .toEqual()` assertion API.
-- `kurai.variables.get/set` bridges scripts and environments (token capture, chained requests).
+- `kurai.expect(value)` matchers: `.toBe()`, `.toEqual()`, `.toBeLessThan()`, `.toBeGreaterThan()`, `.toContain()`.
+- `kurai.variables.get/set` bridges scripts and environments — values written by a script merge back into the active environment, so a login request can capture `{{authToken}}` for the next call.
 
 ### 7. Response Viewer
 
 - **Status pill** color-coded by class (2xx green, 4xx orange, 5xx red) with human-readable status text.
 - **Measured timing and size** — real numbers from the proxy, formatted for humans (`89 ms`, `12.4 KB`).
+- **Body render modes** — Pretty (highlighted JSON), Raw, **Preview** (HTML rendered in a fully sandboxed iframe — scripts blocked), and **Visualize** (JSON arrays become a sortable-looking data table).
 - **JSON syntax highlighting** — keys, strings, numbers, booleans, and nulls each styled, with all content HTML-escaped first (a hostile response body can't inject markup).
-- **Headers tab** and **copy-body button**.
+- **Headers, Cookies, and Test Results tabs** with live count badges (each `Set-Cookie` parsed into name/value/attribute chips; the tests badge turns red on failures).
+- **Copy button** always copies the raw body.
+- **Resizable panels** — drag the divider between request and response (and the sidebar edge); sizes persist across reloads, double-click resets.
 - **Empty state** that teaches the `Ctrl+Enter` shortcut instead of showing a blank pane.
 
 ### 8. Theming & UX

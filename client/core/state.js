@@ -37,7 +37,8 @@ function createDefaultState() {
       params: [],
       headers: [],
       body: { type: 'none', content: '', formData: [] },
-      auth: { type: 'inherit' }
+      auth: { type: 'inherit' },
+      tests: ''                        /* post-response kurai.test() script */
     },
     currentResponse: null,
     collections: [],

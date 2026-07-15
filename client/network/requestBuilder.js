@@ -13,6 +13,7 @@
 
 import { applyAuthHeaders } from './auth.js';
 import { CONTENT_TYPES } from '../core/constants.js';
+import { splitUrl, buildQuery } from '../core/urlQuery.js';
 
 /**
  * Content-Type implied by each body type.
@@ -46,22 +47,24 @@ function encodeBody(body) {
 export function buildRequestObject(requestState) {
   const auth = requestState.auth || {};
 
-  // Merge parameters into URL if enabled
-  let finalUrl = requestState.url;
-  const enabledParams = (requestState.params || []).filter(p => p.enabled);
-  const searchParams = new URLSearchParams();
-  enabledParams.forEach(p => searchParams.append(p.key, p.value));
+  // WHY rebuild the query exclusively from params: the URL bar and the params
+  // rows are two views of the same query string (live-synced in the UI), so
+  // appending would duplicate every pair. The base URL is authoritative for
+  // everything before '?'; the params array is authoritative for the query.
+  // No URLSearchParams — it would percent-mangle values; the server-side
+  // new URL() call normalises encoding.
+  const { base } = splitUrl(requestState.url);
+  const queryParts = [];
+  const paramsQuery = buildQuery(requestState.params || []);
+  if (paramsQuery) queryParts.push(paramsQuery);
 
   // API key auth may target the query string instead of a header.
   if (auth.type === 'apiKey' && auth.apiKey?.in === 'query' && auth.apiKey?.key) {
-    searchParams.append(auth.apiKey.key, auth.apiKey.value || '');
+    queryParts.push(`${auth.apiKey.key}=${auth.apiKey.value || ''}`);
   }
 
-  const queryString = searchParams.toString();
-  if (queryString) {
-    const separator = finalUrl.includes('?') ? '&' : '?';
-    finalUrl += `${separator}${queryString}`;
-  }
+  const queryString = queryParts.join('&');
+  const finalUrl = queryString ? `${base}?${queryString}` : base;
 
   // Compile active headers
   let headers = (requestState.headers || [])

@@ -367,6 +367,8 @@ Any response → the copy icon (top-right of the response panel) copies the pret
 | GET | `/api/protected/basic` | Basic auth |
 | GET | `/api/protected/apikey` | API key (header or `?api_key=`) |
 | ALL | `/api/echo` | Echoes method/query/headers/body |
+| GET | `/api/cookies` | Sets two cookies → exercises the Cookies tab |
+| GET | `/api/html` | Returns HTML → exercises the Preview body mode |
 | GET | `/api/status/:code` | Any status code |
 | GET | `/api/slow?ms=` | Delay simulator (max 20 s) |
 | GET | `/api/large?kb=` | Payload size simulator (max 5 MB) |

@@ -158,6 +158,7 @@ function bindHandlers(container) {
         params: [], headers: [],
         body: { type: 'none', content: '', formData: [] },
         auth: { type: 'inherit' },
+        tests: '',
         ...saved
       });
       showToast(`Loaded "${saved.name}"`, 'info', 1500);

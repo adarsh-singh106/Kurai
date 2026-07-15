@@ -86,6 +86,7 @@ const historyView = {
           params: [], headers: [],
           body: { type: 'none', content: '', formData: [] },
           auth: { type: 'inherit' },
+          tests: '',
           ...request
         });
         showToast('Request loaded from history', 'info', 1500);

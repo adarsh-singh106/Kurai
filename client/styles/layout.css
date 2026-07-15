@@ -158,8 +158,14 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  position: relative;                  /* WHY: anchors the absolute resize handle */
   transition: width var(--transition-normal),
               min-width var(--transition-normal);
+}
+
+/** While dragging: kill the width transition so the sidebar tracks the pointer. */
+.sidebar.resizing {
+  transition: none;
 }
 
 /** Collapsed state toggled by JS. */
@@ -229,6 +235,34 @@
   gap: var(--space-sm);
 }
 
+/** While a panel drag is live: no text selection, and iframes must not
+ *  swallow pointermove events (the response Preview iframe would). */
+.main-content.resizing {
+  user-select: none;
+}
+
+.main-content.resizing iframe {
+  pointer-events: none;
+}
+
+/* ── Panel Resizer ────────────────────────────────────────────────────────
+ * WHY: Draggable strip between request builder and response viewer, letting
+ *      users trade vertical space between the two panels (Postman-style).
+ */
+.panel-resizer {
+  flex: 0 0 6px;
+  cursor: row-resize;
+  border-radius: var(--radius-full);
+  background: transparent;
+  transition: background var(--transition-fast);
+  touch-action: none;                  /* WHY: pointer events own the gesture on touch */
+}
+
+.panel-resizer:hover,
+.panel-resizer.dragging {
+  background: var(--color-primary);
+}
+
 /* ╔═══════════════════════════════════════════════════════════════════════════╗
  * ║  REQUEST BUILDER PANEL                                                  ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝ */
@@ -256,7 +290,9 @@
  * ╚═══════════════════════════════════════════════════════════════════════════╝ */
 
 .response-viewer-panel {
-  flex: 0 0 42%;                       /* WHY: flex-basis instead of height — works with column flex */
+  /* WHY var + flex-basis: JS-driven resize updates one custom property;
+   * 42% remains the default when the user has never dragged. */
+  flex: 0 0 var(--response-height, 42%);
   min-height: 200px;                   /* WHY: prevents panel from collapsing to nothing */
   display: flex;
   flex-direction: column;
@@ -358,7 +394,14 @@
   }
 
   .response-viewer-panel {
-    flex: 0 0 50%;                     /* Give response more room on small screens */
+    flex: 0 0 50% !important;          /* Give response more room on small screens
+                                          (!important beats the JS-set --response-height) */
+  }
+
+  /* Drag handles make no sense on touch-first small screens. */
+  .panel-resizer,
+  .sidebar-resize-handle {
+    display: none;
   }
 
   .brand-tag,

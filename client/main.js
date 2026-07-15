@@ -14,8 +14,9 @@
 import requestView from './features/request/requestView.js';
 import responseView from './features/response/responseView.js';
 import collectionView from './features/collections/collectionView.js';
-import environmentView from './features/environment/environmentView.js';
+import environmentView, { ACTIVE_ENV_STORAGE_KEY } from './features/environment/environmentView.js';
 import historyView from './features/history/historyView.js';
+import layoutView from './features/layout/layoutView.js';
 import collectionService from './features/collections/collectionService.js';
 import environmentStorage from './features/environment/environmentStorage.js';
 import historyStorage from './features/history/historyStorage.js';
@@ -114,6 +115,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     collectionView.init();
     environmentView.init();
     historyView.init();
+    layoutView.init();
 
     console.log('[kurai] Features initialized.');
 
@@ -124,6 +126,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // 4. Populate State
     state.setEnvironments(environments);
+
+    // Restore the last active environment (guard against IDs deleted since —
+    // setActiveEnvironmentId throws on unknown IDs).
+    try {
+      const savedEnvId = localStorage.getItem(ACTIVE_ENV_STORAGE_KEY);
+      if (savedEnvId && environments.some(e => e.id === savedEnvId)) {
+        state.setActiveEnvironmentId(savedEnvId);
+      }
+    } catch { /* private mode — start with no environment */ }
 
     // WHY setHistory over addToHistory loop: one event → one render, and
     // reversing shows newest-first when entries were stored sequentially.

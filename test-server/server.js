@@ -251,6 +251,25 @@ app.all('/api/echo', (req, res) => {
   });
 });
 
+// Sets two cookies — exercises Kurai's response Cookies tab.
+app.get('/api/cookies', (req, res) => {
+  res.setHeader('Set-Cookie', [
+    'session_id=kurai-demo-session; Path=/; HttpOnly; Max-Age=3600',
+    'theme=dark; Path=/; SameSite=Lax'
+  ]);
+  res.json({ message: 'Two cookies set — check the Cookies tab' });
+});
+
+// Returns HTML — exercises Kurai's Preview body mode.
+app.get('/api/html', (req, res) => {
+  res.type('html').send(`<!doctype html>
+<html><body style="font-family: sans-serif; padding: 2rem">
+  <h1>Kurai Preview demo</h1>
+  <p>This HTML renders inside a <strong>sandboxed</strong> iframe.</p>
+  <script>document.body.innerHTML = 'If you can read the heading above, scripts were blocked — good.'</script>
+</body></html>`);
+});
+
 app.get('/api/status/:code', (req, res) => {
   const code = parseInt(req.params.code);
   if (isNaN(code) || code < 200 || code > 599) {

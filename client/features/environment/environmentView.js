@@ -19,6 +19,12 @@ import { escapeHtml, showToast, promptDialog, confirmDialog } from '../../core/u
 /** Which environment is open in the manager modal. */
 let selectedEnvId = null;
 
+/**
+ * WHY persistence lives here: state.js deliberately owns no storage. The active
+ * env resets on every reload otherwise, silently breaking {{variable}} URLs.
+ */
+export const ACTIVE_ENV_STORAGE_KEY = 'kurai.activeEnvironmentId';
+
 /* ── Manager modal ───────────────────────────────────────────────────────── */
 
 function closeManager() {
@@ -215,6 +221,13 @@ const environmentView = {
     if (selector) {
       selector.addEventListener('change', () => {
         state.setActiveEnvironmentId(selector.value || null);
+        try {
+          if (selector.value) {
+            localStorage.setItem(ACTIVE_ENV_STORAGE_KEY, selector.value);
+          } else {
+            localStorage.removeItem(ACTIVE_ENV_STORAGE_KEY);
+          }
+        } catch { /* private mode — selection just won't persist */ }
       });
     }
 

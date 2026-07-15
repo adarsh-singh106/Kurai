@@ -1061,7 +1061,18 @@
   color: var(--text-faint);
 }
 
-/* ── Response view tabs (Body / Headers) ─────────────────────────────────── */
+/* ── Response view tabs (Body / Headers / Cookies / Test Results) ────────── */
+.response-tabs-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-md);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  flex-wrap: wrap;                     /* WHY: mode strip drops below tabs on narrow panels */
+}
+
 .response-tabs {
   display: inline-flex;
   gap: 2px;
@@ -1080,12 +1091,23 @@
               background var(--transition-fast);
 }
 
-.response-tab:hover { color: var(--text-main); }
+.response-tab:hover:not(:disabled) { color: var(--text-main); }
+
+.response-tab:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 
 .response-tab.active {
   color: var(--text-main);
   background: var(--bg-panel-raised);
   box-shadow: var(--shadow-sm);
+}
+
+/** Failing test badge turns red so failures are visible from any tab. */
+.tab-count.fail {
+  background: var(--status-5xx-soft, rgba(239, 68, 68, 0.15));
+  color: var(--status-5xx, #ef4444);
 }
 
 /** Scrollable response body container. */
@@ -1142,6 +1164,112 @@
   color: var(--text-muted);
   overflow-wrap: anywhere;
   min-width: 0;
+}
+
+/* ── HTML preview (sandboxed iframe) ─────────────────────────────────────── */
+.response-preview {
+  flex: 1;
+  min-height: 0;
+  border: none;
+  background: #fff;                    /* WHY: pages usually assume a light canvas */
+}
+
+/* ── Response cookies table ──────────────────────────────────────────────── */
+.response-cookies {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.cookie-attr {
+  margin-left: var(--space-xs);
+  font-size: var(--font-size-2xs);
+}
+
+/* ── Test results list ───────────────────────────────────────────────────── */
+.response-tests {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: var(--space-sm) var(--space-md);
+}
+
+.test-result-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  margin-bottom: var(--space-xs);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid transparent;
+  background: var(--bg-input);
+}
+
+.test-result-row.pass { border-left-color: var(--color-success); }
+.test-result-row.fail { border-left-color: var(--status-5xx, #ef4444); }
+
+.test-result-icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-self: center;
+}
+
+.test-result-row.pass .test-result-icon { color: var(--color-success); }
+.test-result-row.fail .test-result-icon { color: var(--status-5xx, #ef4444); }
+
+.test-result-name {
+  color: var(--text-main);
+  font-weight: var(--font-weight-medium);
+}
+
+.test-result-error {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+/* ── Visualize table (JSON array → grid) ─────────────────────────────────── */
+.viz-wrap {
+  white-space: normal;                 /* WHY: host <pre> is pre-wrap */
+}
+
+.viz-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-xs);
+}
+
+.viz-table th {
+  position: sticky;
+  top: calc(-1 * var(--space-md));     /* WHY: cancels the <pre> padding above */
+  text-align: left;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--bg-panel-raised);
+  color: var(--syntax-key);
+  font-weight: var(--font-weight-semibold);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.viz-table td {
+  padding: var(--space-xs) var(--space-sm);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+  max-width: 320px;
+}
+
+.viz-table tbody tr:hover td { background: var(--bg-input); }
+
+.viz-truncated {
+  padding: var(--space-sm);
+  text-align: center;
+  color: var(--text-faint);
+  font-size: var(--font-size-xs);
 }
 
 /* ── Response empty state ────────────────────────────────────────────────── */

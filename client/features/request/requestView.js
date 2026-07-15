@@ -16,6 +16,7 @@ import requestService from './requestService.js';
 import state from '../../core/state.js';
 import eventBus from '../../core/eventBus.js';
 import { escapeHtml } from '../../core/utils.js';
+import { splitUrl, parseQuery, buildQuery, replaceQuery } from '../../core/urlQuery.js';
 
 /**
  * WHY this flag: our own edits round-trip through state and re-emit
@@ -103,7 +104,7 @@ function renderKvEditor(container, items, commit, placeholders) {
   container.appendChild(addBtn);
 }
 
-/** Update the little count bubbles on the Params/Headers tabs. */
+/** Update the little count bubbles on the Params/Headers/Tests tabs. */
 function updateTabCounts(request) {
   const counts = {
     params: (request.params || []).filter(p => p.enabled && p.key).length,
@@ -115,6 +116,12 @@ function updateTabCounts(request) {
     el.textContent = count;
     el.hidden = count === 0;
   }
+  // Tests get a presence dot, not a count — one script per request.
+  const testsBadge = document.querySelector('[data-count-for="tests"]');
+  if (testsBadge) {
+    testsBadge.textContent = '●';
+    testsBadge.hidden = !(request.tests || '').trim();
+  }
 }
 
 /* ── Sub-panel renderers ─────────────────────────────────────────────────── */
@@ -124,7 +131,10 @@ function renderParamsEditor(request) {
   if (!container) return;
   const params = request.params || [];
   renderKvEditor(container, params, (items) => {
-    patchRequest({ params: items });
+    // WHY replaceQuery: params edits rewrite the URL's query string live —
+    // the 'request:changed' handler mirrors it into the URL bar (Postman UX).
+    const currentUrl = state.get('currentRequest').url;
+    patchRequest({ params: items, url: replaceQuery(currentUrl, items) });
     updateTabCounts({ ...request, params: items });
   }, { keyPlaceholder: 'key', valuePlaceholder: 'value', rowLabel: 'param' });
 }
@@ -200,12 +210,18 @@ function renderAuthEditor(request) {
   }
 }
 
+function renderTestsEditor(request) {
+  const input = document.getElementById('request-tests-input');
+  if (input) input.value = request.tests || '';
+}
+
 /** Full re-render of every request sub-panel (skipped for our own edits). */
 function renderAll(request) {
   renderParamsEditor(request);
   renderHeadersEditor(request);
   renderBodyEditor(request);
   renderAuthEditor(request);
+  renderTestsEditor(request);
   updateTabCounts(request);
 }
 
@@ -227,7 +243,27 @@ const requestView = {
 
     if (urlInput) {
       urlInput.addEventListener('input', (e) => {
-        requestState.updateUrl(e.target.value);
+        // WHY: docs and terminals present requests as "GET https://…" — pasting
+        // that whole line used to reach the proxy verbatim and 400. Detect the
+        // verb, adopt it as the method, and keep only the URL.
+        const prefixed = e.target.value.match(/^\s*(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS|QUERY)\s+(\S.*)$/i);
+        if (prefixed) {
+          requestState.updateMethod(prefixed[1].toUpperCase());
+          urlInput.value = prefixed[2];
+        }
+
+        // URL → params live sync: typing "?page=1" materialises param rows.
+        // Disabled rows aren't represented in the URL, so they're preserved.
+        const current = state.get('currentRequest');
+        const urlParams = parseQuery(splitUrl(urlInput.value).query);
+        const disabled = (current.params || []).filter(p => !p.enabled);
+        const params = [...urlParams, ...disabled];
+
+        // WHY patchRequest (suppressed) + explicit param re-render: focus is
+        // in the URL bar, so rebuilding the params editor can't steal it.
+        patchRequest({ url: urlInput.value, params });
+        renderParamsEditor({ ...current, url: urlInput.value, params });
+        updateTabCounts({ ...current, params });
       });
       // Enter in the URL bar sends the request — muscle memory from browsers.
       urlInput.addEventListener('keydown', (e) => {
@@ -269,6 +305,15 @@ const requestView = {
       bodyInput.addEventListener('input', () => {
         const current = state.get('currentRequest');
         patchRequest({ body: { ...(current.body || {}), content: bodyInput.value } });
+      });
+    }
+
+    // ── Tests script ───────────────────────────────────────────────────
+    const testsInput = document.getElementById('request-tests-input');
+    if (testsInput) {
+      testsInput.addEventListener('input', () => {
+        patchRequest({ tests: testsInput.value });
+        updateTabCounts({ ...state.get('currentRequest') });
       });
     }
 
@@ -324,7 +369,19 @@ const requestView = {
       if (urlInput && urlInput.value !== request.url) urlInput.value = request.url;
       // WHY suppressRender: skip editor rebuilds for our own keystrokes —
       // full renders only happen on external loads (history click, reset).
-      if (!suppressRender) renderAll(request);
+      if (!suppressRender) {
+        // Reconcile legacy entries (query in URL, empty params) so old
+        // history/collection items get param rows on load. The suppressed
+        // patch below cannot re-enter this branch.
+        const fromUrl = parseQuery(splitUrl(request.url).query);
+        const enabled = (request.params || []).filter(p => p.enabled);
+        if (buildQuery(fromUrl) !== buildQuery(enabled)) {
+          const params = [...fromUrl, ...(request.params || []).filter(p => !p.enabled)];
+          request = { ...request, params };
+          patchRequest({ params });
+        }
+        renderAll(request);
+      }
     });
 
     // Initial paint from default state.

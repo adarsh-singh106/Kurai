@@ -116,6 +116,10 @@
           <div id="collections-list" class="sidebar-panel active" role="tabpanel"></div>
           <div id="history-list" class="sidebar-panel" role="tabpanel"></div>
         </div>
+
+        <!-- Draggable right edge (double-click resets width) -->
+        <div id="sidebar-resize-handle" class="sidebar-resize-handle" role="separator" aria-orientation="vertical"
+             title="Drag to resize · double-click to reset"></div>
       </aside>
 
       <!-- Main Workspace -->
@@ -155,6 +159,7 @@
             <button class="tab-btn" data-tab="headers" role="tab" aria-selected="false">Headers <span class="tab-count" data-count-for="headers" hidden></span></button>
             <button class="tab-btn" data-tab="body" role="tab" aria-selected="false">Body</button>
             <button class="tab-btn" data-tab="auth" role="tab" aria-selected="false">Auth</button>
+            <button class="tab-btn" data-tab="tests" role="tab" aria-selected="false">Tests <span class="tab-count" data-count-for="tests" hidden></span></button>
           </nav>
 
           <div class="request-tab-panels">
@@ -209,8 +214,16 @@
                 </select>
               </div>
             </div>
+            <div id="tab-panel-tests" class="tab-panel" role="tabpanel">
+              <textarea id="request-tests-input" class="code-textarea" spellcheck="false" aria-label="Test script"
+                        placeholder="kurai.test('status is 200', () => kurai.expect(response.status).toBe(200));&#10;kurai.test('fast enough', () => kurai.expect(response.time).toBeLessThan(500));&#10;&#10;// response.json — parsed body · response.headers / body / time / size&#10;// kurai.variables.get('KEY') / .set('KEY', value) — chain requests"></textarea>
+            </div>
           </div>
         </section>
+
+        <!-- Draggable divider between request & response (double-click resets) -->
+        <div id="panel-resizer" class="panel-resizer" role="separator" aria-orientation="horizontal"
+             title="Drag to resize · double-click to reset"></div>
 
         <!-- Response Viewer (Layer 1) -->
         <section id="response-viewer" class="response-viewer-panel">
@@ -222,16 +235,29 @@
               <span id="response-size" class="meta-chip" hidden></span>
             </div>
             <div class="response-meta-right">
-              <nav class="response-tabs" role="tablist" aria-label="Response views">
-                <button class="response-tab active" data-rtab="body" role="tab" aria-selected="true">Body</button>
-                <button class="response-tab" data-rtab="headers" role="tab" aria-selected="false">Headers</button>
-              </nav>
-              <button id="copy-response-btn" class="icon-btn" title="Copy response body" aria-label="Copy response body" hidden>
+              <button id="copy-response-btn" class="icon-btn" title="Copy raw response body" aria-label="Copy raw response body" hidden>
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
                   <rect x="5.5" y="5.5" width="9" height="9" rx="1.5"/><path d="M10.5 5.5v-3a1 1 0 0 0-1-1h-7a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h3"/>
                 </svg>
               </button>
             </div>
+          </div>
+
+          <!-- Response view tabs (own row — badges need the horizontal space) -->
+          <div class="response-tabs-row">
+            <nav class="response-tabs" role="tablist" aria-label="Response views">
+              <button class="response-tab active" data-rtab="body" role="tab" aria-selected="true">Body</button>
+              <button class="response-tab" data-rtab="headers" role="tab" aria-selected="false">Headers <span class="tab-count" id="rtab-count-headers" hidden></span></button>
+              <button class="response-tab" data-rtab="cookies" role="tab" aria-selected="false">Cookies <span class="tab-count" id="rtab-count-cookies" hidden></span></button>
+              <button class="response-tab" data-rtab="tests" role="tab" aria-selected="false">Test Results <span class="tab-count" id="rtab-count-tests" hidden></span></button>
+            </nav>
+            <!-- Body render modes — visible only while the Body tab is active -->
+            <nav class="response-tabs response-submodes" id="body-mode-tabs" role="tablist" aria-label="Body render mode" hidden>
+              <button class="response-tab active" data-bmode="pretty" role="tab" aria-selected="true">Pretty</button>
+              <button class="response-tab" data-bmode="raw" role="tab" aria-selected="false">Raw</button>
+              <button class="response-tab" data-bmode="preview" role="tab" aria-selected="false" disabled title="Preview is available for HTML responses">Preview</button>
+              <button class="response-tab" data-bmode="table" role="tab" aria-selected="false" disabled title="Visualize is available when the body is a JSON array of objects">Visualize</button>
+            </nav>
           </div>
 
           <div class="response-content">
@@ -247,7 +273,11 @@
             </div>
 
             <pre id="response-body-display" class="response-body" hidden></pre>
+            <!-- WHY empty sandbox attr: no scripts, no same-origin — untrusted HTML stays inert -->
+            <iframe id="response-preview-frame" class="response-preview" sandbox title="HTML response preview" hidden></iframe>
             <div id="response-headers-display" class="response-headers" hidden></div>
+            <div id="response-cookies-display" class="response-cookies" hidden></div>
+            <div id="response-tests-display" class="response-tests" hidden></div>
           </div>
         </section>
       </main>

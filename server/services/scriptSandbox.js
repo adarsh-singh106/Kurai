@@ -22,14 +22,19 @@ import vm from 'vm';
  *
  * @param {string} code - raw JS script string to run
  * @param {Object} contextVariables - key-value store of active environment/variables
+ * @param {Object|null} response - plain response snapshot exposed to the script:
+ *                                 { status, statusText, headers, body, json, time, size }
  * @returns {Object} { variables, testResults }
  */
-export function runScriptInSandbox(code, contextVariables = {}) {
+export function runScriptInSandbox(code, contextVariables = {}, response = null) {
   const variables = { ...contextVariables };
   const testResults = [];
 
   // Setup the safe sandboxed environment global object
   const sandbox = {
+    // Snapshot of the upstream HTTP response — never the live fetch object,
+    // so scripts can't reach streams, agents, or anything with I/O.
+    response,
     // Kurai environment API (similar to Postman's pm object)
     kurai: {
       variables: {
@@ -53,6 +58,22 @@ export function runScriptInSandbox(code, contextVariables = {}) {
         toEqual: (expected) => {
           if (JSON.stringify(value) !== JSON.stringify(expected)) {
             throw new Error(`Expected ${JSON.stringify(value)} to equal ${JSON.stringify(expected)}`);
+          }
+        },
+        toBeLessThan: (expected) => {
+          if (!(value < expected)) {
+            throw new Error(`Expected ${value} to be less than ${expected}`);
+          }
+        },
+        toBeGreaterThan: (expected) => {
+          if (!(value > expected)) {
+            throw new Error(`Expected ${value} to be greater than ${expected}`);
+          }
+        },
+        // WHY .includes: covers both strings and arrays with one matcher.
+        toContain: (expected) => {
+          if (!value || typeof value.includes !== 'function' || !value.includes(expected)) {
+            throw new Error(`Expected ${JSON.stringify(value)} to contain ${JSON.stringify(expected)}`);
           }
         }
       })

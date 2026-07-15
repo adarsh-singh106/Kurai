@@ -260,6 +260,9 @@ export async function forwardRequest({ method, url, headers = {}, body, timeout 
       status: response.status,
       statusText: response.statusText,
       headers: Object.fromEntries(response.headers.entries()),
+      // WHY getSetCookie: entries() folds multiple Set-Cookie headers into one
+      // comma-joined string — this keeps each cookie intact for the client.
+      setCookies: response.headers.getSetCookie(),
       body: bodyText,
       time: Math.round(durationMs),
       size: Buffer.byteLength(bodyText, 'utf8'),
