@@ -20,13 +20,10 @@ import environmentService from '../environment/environmentService.js';
 const requestService = {
   sendCurrentRequest: async () => {
     const rawRequest = state.get('currentRequest');
-    
-    // Resolve mustache variables in url, headers, and body
-    const resolvedUrl = environmentService.resolveTemplate(rawRequest.url);
-    const resolvedRequest = {
-      ...rawRequest,
-      url: resolvedUrl
-    };
+
+    // Resolve mustache variables everywhere they can appear: URL, params,
+    // headers, body content/fields, and auth secrets.
+    const resolvedRequest = environmentService.resolveRequest(rawRequest);
 
     state.setLoading(true);
     eventBus.emit('request:sending');

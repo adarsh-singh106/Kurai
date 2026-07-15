@@ -18,11 +18,18 @@ const collectionStorage = {
     return storageAdapter.collections.get(KEY) || [];
   },
 
-  save: async (collection) => {
-    const list = storageAdapter.collections.get(KEY) || [];
-    list.push(collection);
+  /**
+   * Persist the FULL collections list.
+   * WHY whole-list writes: collections are a small JSON blob; replacing the
+   * array atomically is simpler and safer than per-item diffing, and it makes
+   * create/update/delete all the same one-line operation for the service.
+   *
+   * @param {Array} list — complete collections array
+   * @returns {Array} the persisted list
+   */
+  persist: async (list) => {
     storageAdapter.collections.set(KEY, list);
-    return collection;
+    return list;
   }
 };
 

@@ -127,3 +127,121 @@ export function showToast(message, type = 'info', duration = 2500) {
     setTimeout(() => toast.remove(), 200);
   }, duration);
 }
+
+/* ── Dialogs ─────────────────────────────────────────────────────────────── */
+
+/**
+ * WHY not window.prompt/confirm: they freeze the entire main thread (no
+ * animations, no pending fetches painted) and are disabled in some embedded
+ * browser contexts. These render the existing .modal-overlay component and
+ * resolve a Promise instead.
+ */
+
+/** Build the shared overlay + dialog scaffold; returns {overlay, content}. */
+function buildModal(titleText) {
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  const content = document.createElement('div');
+  content.className = 'modal-content';
+  content.setAttribute('role', 'dialog');
+  content.setAttribute('aria-modal', 'true');
+  if (titleText) {
+    const title = document.createElement('div');
+    title.className = 'modal-title';
+    title.textContent = titleText;
+    content.appendChild(title);
+  }
+  overlay.appendChild(content);
+  return { overlay, content };
+}
+
+/**
+ * promptDialog — Promise-based replacement for window.prompt.
+ *
+ * @param {string} title — dialog heading
+ * @param {{placeholder?: string, value?: string, confirmLabel?: string}} [opts]
+ * @returns {Promise<string|null>} trimmed input, or `null` on cancel/Escape
+ */
+export function promptDialog(title, opts = {}) {
+  return new Promise((resolve) => {
+    const { overlay, content } = buildModal(title);
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'input-text';
+    input.placeholder = opts.placeholder || '';
+    input.value = opts.value || '';
+    input.autocomplete = 'off';
+    input.spellcheck = false;
+
+    const actions = document.createElement('div');
+    actions.className = 'modal-actions';
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'btn btn-ghost';
+    cancelBtn.textContent = 'Cancel';
+    const okBtn = document.createElement('button');
+    okBtn.className = 'btn btn-primary';
+    okBtn.textContent = opts.confirmLabel || 'Save';
+    actions.append(cancelBtn, okBtn);
+    content.append(input, actions);
+
+    const close = (result) => {
+      overlay.remove();
+      resolve(result);
+    };
+    okBtn.addEventListener('click', () => close(input.value.trim()));
+    cancelBtn.addEventListener('click', () => close(null));
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(null); });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') close(input.value.trim());
+      if (e.key === 'Escape') close(null);
+    });
+
+    document.body.appendChild(overlay);
+    input.focus();
+    input.select();
+  });
+}
+
+/**
+ * confirmDialog — Promise-based replacement for window.confirm.
+ *
+ * @param {string} title — dialog heading
+ * @param {{message?: string, confirmLabel?: string, danger?: boolean}} [opts]
+ * @returns {Promise<boolean>}
+ */
+export function confirmDialog(title, opts = {}) {
+  return new Promise((resolve) => {
+    const { overlay, content } = buildModal(title);
+
+    if (opts.message) {
+      const msg = document.createElement('p');
+      msg.className = 'modal-message';
+      msg.textContent = opts.message;
+      content.appendChild(msg);
+    }
+
+    const actions = document.createElement('div');
+    actions.className = 'modal-actions';
+    const cancelBtn = document.createElement('button');
+    cancelBtn.className = 'btn btn-ghost';
+    cancelBtn.textContent = 'Cancel';
+    const okBtn = document.createElement('button');
+    okBtn.className = `btn ${opts.danger ? 'btn-danger' : 'btn-primary'}`;
+    okBtn.textContent = opts.confirmLabel || 'Confirm';
+    actions.append(cancelBtn, okBtn);
+    content.appendChild(actions);
+
+    const close = (result) => {
+      overlay.remove();
+      resolve(result);
+    };
+    okBtn.addEventListener('click', () => close(true));
+    cancelBtn.addEventListener('click', () => close(false));
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) close(false); });
+    overlay.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(false); });
+
+    document.body.appendChild(overlay);
+    okBtn.focus();
+  });
+}

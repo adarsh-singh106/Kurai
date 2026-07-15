@@ -79,6 +79,7 @@
   --method-delete: #dc2626;
   --method-head: #475569;
   --method-options: #57534e;
+  --method-query: #0891b2;
   --method-get-soft: rgba(5, 150, 105, 0.1);
   --method-post-soft: rgba(217, 119, 6, 0.1);
   --method-put-soft: rgba(37, 99, 235, 0.1);
@@ -86,6 +87,7 @@
   --method-delete-soft: rgba(220, 38, 38, 0.1);
   --method-head-soft: rgba(71, 85, 105, 0.1);
   --method-options-soft: rgba(87, 83, 78, 0.1);
+  --method-query-soft: rgba(8, 145, 178, 0.1);
 
   /* ── HTTP Status-Code Bands ─────────────────────────────────────────── */
   --status-2xx: #059669;

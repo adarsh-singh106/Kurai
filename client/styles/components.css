@@ -260,6 +260,7 @@
 .method-select[data-method="DELETE"]  { color: var(--method-delete); }
 .method-select[data-method="HEAD"]    { color: var(--method-head); }
 .method-select[data-method="OPTIONS"] { color: var(--method-options); }
+.method-select[data-method="QUERY"]   { color: var(--method-query); }
 
 /** URL input — the widest control on screen; mono for path legibility. */
 .url-input {
@@ -364,7 +365,8 @@
 .badge-patch,
 .badge-delete,
 .badge-head,
-.badge-options {
+.badge-options,
+.badge-query {
   font-family: var(--font-mono);
   font-size: var(--font-size-2xs);
   text-transform: uppercase;
@@ -377,6 +379,7 @@
 .badge-delete  { background: var(--method-delete-soft);  color: var(--method-delete); }
 .badge-head    { background: var(--method-head-soft);    color: var(--method-head); }
 .badge-options { background: var(--method-options-soft); color: var(--method-options); }
+.badge-query   { background: var(--method-query-soft);   color: var(--method-query); }
 
 /* ╔═══════════════════════════════════════════════════════════════════════════╗
  * ║  STATUS PILLS — HTTP response code bands                                ║
@@ -828,9 +831,134 @@
 }
 
 .collection-item .coll-name {
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.collection-item .coll-chevron {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--text-faint);
+  transition: transform var(--transition-fast);
+}
+
+.collection-item .coll-chevron.open {
+  transform: rotate(90deg);
+}
+
+/** Item count bubble on the collection row. */
+.collection-item .coll-count {
+  flex-shrink: 0;
+  font-size: var(--font-size-2xs);
+  color: var(--text-faint);
+  background: var(--bg-hover);
+  border-radius: var(--radius-full, 999px);
+  padding: 0 var(--space-xs);
+  min-width: 1.4em;
+  text-align: center;
+}
+
+/** Hover-revealed row actions (save-request / delete). */
+.coll-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 2px;
+  border-radius: var(--radius-sm);
+  color: var(--text-faint);
+  opacity: 0;
+  transition: opacity var(--transition-fast),
+              color var(--transition-fast),
+              background var(--transition-fast);
+}
+
+.collection-item:hover .coll-action,
+.collection-request:hover .coll-action {
+  opacity: 1;
+}
+
+.coll-action:hover {
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+}
+
+.coll-action.coll-delete:hover,
+.coll-action.req-delete:hover {
+  color: var(--color-error);
+  background: var(--color-error-soft);
+}
+
+/** Nested saved-request rows under an expanded collection. */
+.collection-children {
+  /* WHY margin over padding: keeps the hover background of child rows
+     flush with their own edges instead of the whole indent gutter. */
+  margin-left: var(--space-lg);
+  border-left: 1px solid var(--border-color);
+  padding-left: var(--space-xs);
+}
+
+.collection-request {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  transition: background var(--transition-fast);
+}
+
+.collection-request:hover {
+  background: var(--bg-hover);
+}
+
+.collection-request .req-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+
+.collection-request:hover .req-name {
+  color: var(--text-main);
+}
+
+.collection-empty-hint {
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--font-size-xs);
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+/** Ghost "new collection" affordance pinned under the list. */
+.new-collection-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  width: 100%;
+  margin-top: var(--space-sm);
+  padding: var(--space-xs);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast),
+              border-color var(--transition-fast),
+              background var(--transition-fast);
+}
+
+.new-collection-btn:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
 }
 
 /* ── History Items ───────────────────────────────────────────────────────── */
@@ -1296,6 +1424,110 @@
 @keyframes modal-in {
   from { opacity: 0; transform: scale(0.95) translateY(8px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold, 600);
+  color: var(--text-main);
+  margin-bottom: var(--space-md);
+}
+
+.modal-message {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+/** Destructive-action variant used by confirm dialogs. */
+.btn-danger {
+  background: var(--color-error);
+  color: white;
+}
+
+.btn-danger:hover {
+  filter: brightness(1.1);
+}
+
+/* ── Environment Manager ─────────────────────────────────────────────────── */
+.env-manager {
+  width: 640px;
+}
+
+.env-manager-body {
+  display: flex;
+  gap: var(--space-lg);
+  min-height: 260px;
+}
+
+.env-manager-list {
+  width: 220px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-color);
+  padding-right: var(--space-md);
+}
+
+.env-list-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  transition: background var(--transition-fast);
+}
+
+.env-list-item:hover {
+  background: var(--bg-hover);
+}
+
+.env-list-item.active {
+  background: var(--bg-active);
+  color: var(--color-primary);
+}
+
+.env-list-item .env-list-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.env-list-item:hover .coll-action {
+  opacity: 1;
+}
+
+.env-manager-vars {
+  flex: 1;
+  min-width: 0;
+}
+
+.env-vars-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+}
+
+@media (max-width: 768px) {
+  .env-manager { width: auto; }
+  .env-manager-body { flex-direction: column; }
+  .env-manager-list {
+    width: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    padding-right: 0;
+    padding-bottom: var(--space-md);
+  }
 }
 
 /* ╔═══════════════════════════════════════════════════════════════════════════╗

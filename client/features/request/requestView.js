@@ -142,13 +142,29 @@ function renderHeadersEditor(request) {
 function renderBodyEditor(request) {
   const bodyType = request.body?.type || 'none';
   const bodyInput = document.getElementById('request-body-input');
+  const formEditor = document.getElementById('body-form-editor');
   const noneHint = document.getElementById('body-none-hint');
   const radio = document.querySelector(`input[name="body-type"][value="${bodyType}"]`);
+
+  const isKv = bodyType === 'form' || bodyType === 'urlencoded';
+  const isText = bodyType === 'json' || bodyType === 'text';
 
   if (radio) radio.checked = true;
   if (bodyInput) {
     bodyInput.value = request.body?.content || '';
-    bodyInput.hidden = bodyType === 'none';
+    bodyInput.hidden = !isText;
+  }
+  if (formEditor) {
+    formEditor.hidden = !isKv;
+    if (isKv) {
+      // WHY shared formData for both KV modes: only the wire encoding differs
+      // (multipart vs urlencoded) — the editing model is identical.
+      const formData = request.body?.formData || [];
+      renderKvEditor(formEditor, formData, (items) => {
+        const current = state.get('currentRequest');
+        patchRequest({ body: { ...(current.body || {}), formData: items } });
+      }, { keyPlaceholder: 'key', valuePlaceholder: 'value', rowLabel: 'field' });
+    }
   }
   if (noneHint) noneHint.hidden = bodyType !== 'none';
 }
@@ -158,8 +174,9 @@ function renderAuthEditor(request) {
   const typeSelect = document.getElementById('auth-type-select');
   const bearerFields = document.getElementById('auth-bearer-fields');
   const basicFields = document.getElementById('auth-basic-fields');
+  const apiKeyFields = document.getElementById('auth-apikey-fields');
 
-  if (typeSelect) typeSelect.value = auth.type === 'bearer' || auth.type === 'basic' ? auth.type : 'inherit';
+  if (typeSelect) typeSelect.value = ['bearer', 'basic', 'apiKey'].includes(auth.type) ? auth.type : 'inherit';
   if (bearerFields) {
     bearerFields.hidden = auth.type !== 'bearer';
     const token = document.getElementById('auth-bearer-token');
@@ -171,6 +188,15 @@ function renderAuthEditor(request) {
     const password = document.getElementById('auth-basic-password');
     if (username) username.value = auth.basic?.username || '';
     if (password) password.value = auth.basic?.password || '';
+  }
+  if (apiKeyFields) {
+    apiKeyFields.hidden = auth.type !== 'apiKey';
+    const key = document.getElementById('auth-apikey-key');
+    const value = document.getElementById('auth-apikey-value');
+    const placement = document.getElementById('auth-apikey-in');
+    if (key) key.value = auth.apiKey?.key || '';
+    if (value) value.value = auth.apiKey?.value || '';
+    if (placement) placement.value = auth.apiKey?.in || 'header';
   }
 }
 
@@ -268,6 +294,17 @@ const requestView = {
     bindAuthField('auth-bearer-token', (auth, v) => ({ ...auth, bearer: { ...(auth.bearer || {}), token: v } }));
     bindAuthField('auth-basic-username', (auth, v) => ({ ...auth, basic: { ...(auth.basic || {}), username: v } }));
     bindAuthField('auth-basic-password', (auth, v) => ({ ...auth, basic: { ...(auth.basic || {}), password: v } }));
+    bindAuthField('auth-apikey-key', (auth, v) => ({ ...auth, apiKey: { ...(auth.apiKey || {}), key: v } }));
+    bindAuthField('auth-apikey-value', (auth, v) => ({ ...auth, apiKey: { ...(auth.apiKey || {}), value: v } }));
+
+    // Placement <select> fires 'change', not 'input'.
+    const apiKeyIn = document.getElementById('auth-apikey-in');
+    if (apiKeyIn) {
+      apiKeyIn.addEventListener('change', () => {
+        const current = state.get('currentRequest');
+        patchRequest({ auth: { ...(current.auth || {}), apiKey: { ...(current.auth?.apiKey || {}), in: apiKeyIn.value } } });
+      });
+    }
 
     // ── Send button loading state ──────────────────────────────────────
     eventBus.on('ui:loading', (isLoading) => {

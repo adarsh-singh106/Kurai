@@ -65,6 +65,12 @@
             <option value="">No Environment</option>
           </select>
         </div>
+        <button id="env-manage-btn" class="icon-btn" title="Manage environments" aria-label="Manage environments">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8" cy="8" r="2.25"/>
+            <path d="M8 1.5v2M8 12.5v2M14.5 8h-2M3.5 8h-2M12.6 3.4l-1.4 1.4M4.8 11.2l-1.4 1.4M12.6 12.6l-1.4-1.4M4.8 4.8L3.4 3.4"/>
+          </svg>
+        </button>
         <button id="theme-toggle-btn" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">
           <!-- moon (shown in dark mode) -->
           <svg class="icon-moon" width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -127,6 +133,7 @@
                 <option value="DELETE">DELETE</option>
                 <option value="HEAD">HEAD</option>
                 <option value="OPTIONS">OPTIONS</option>
+                <option value="QUERY">QUERY</option>
               </select>
             </div>
             <input type="text" id="request-url" class="url-input" placeholder="https://api.example.com/endpoint  —  use {{variables}}"
@@ -162,9 +169,12 @@
                 <label class="body-type-option"><input type="radio" name="body-type" value="none" checked><span>None</span></label>
                 <label class="body-type-option"><input type="radio" name="body-type" value="json"><span>JSON</span></label>
                 <label class="body-type-option"><input type="radio" name="body-type" value="text"><span>Text</span></label>
+                <label class="body-type-option"><input type="radio" name="body-type" value="form"><span>Form Data</span></label>
+                <label class="body-type-option"><input type="radio" name="body-type" value="urlencoded"><span>URL Encoded</span></label>
               </div>
               <textarea id="request-body-input" class="code-textarea" placeholder='{ "key": "value" }'
                         spellcheck="false" aria-label="Request body" hidden></textarea>
+              <div class="kv-editor" id="body-form-editor" hidden></div>
               <div id="body-none-hint" class="panel-hint">This request has no body.</div>
             </div>
             <div id="tab-panel-auth" class="tab-panel" role="tabpanel">
@@ -174,6 +184,7 @@
                   <option value="inherit">No Auth</option>
                   <option value="bearer">Bearer Token</option>
                   <option value="basic">Basic Auth</option>
+                  <option value="apiKey">API Key</option>
                 </select>
               </div>
               <div id="auth-bearer-fields" class="auth-fields" hidden>
@@ -185,6 +196,17 @@
                 <input type="text" id="auth-basic-username" class="input-text" placeholder="Username" autocomplete="off">
                 <label class="field-label" for="auth-basic-password">Password</label>
                 <input type="password" id="auth-basic-password" class="input-text" placeholder="Password" autocomplete="off">
+              </div>
+              <div id="auth-apikey-fields" class="auth-fields" hidden>
+                <label class="field-label" for="auth-apikey-key">Key</label>
+                <input type="text" id="auth-apikey-key" class="input-text" placeholder="e.g. X-API-Key" autocomplete="off" spellcheck="false">
+                <label class="field-label" for="auth-apikey-value">Value</label>
+                <input type="password" id="auth-apikey-value" class="input-text" placeholder="Secret value" autocomplete="off">
+                <label class="field-label" for="auth-apikey-in">Add to</label>
+                <select id="auth-apikey-in" class="input-text auth-type-select" aria-label="API key placement">
+                  <option value="header">Header</option>
+                  <option value="query">Query Param</option>
+                </select>
               </div>
             </div>
           </div>

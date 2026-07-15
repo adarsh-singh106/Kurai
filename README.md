@@ -21,7 +21,7 @@ npm install && npm run dev   →   http://localhost:3000   →   start sending r
 
 ## Features
 
-- **Request builder** — all HTTP methods, headers, query params, raw/JSON bodies
+- **Request builder** — all HTTP methods including the new `QUERY`, headers, query params, JSON/raw/form-data/x-www-form-urlencoded bodies, Bearer/Basic/API-Key auth
 - **SSRF-hardened proxy** — bypass CORS safely; private/loopback/metadata IPs (IPv4 *and* IPv6) are blocked on every redirect hop, not just the first request
 - **Collections** — save and organize requests, persisted server-side
 - **Environments** — variable sets (`{{baseUrl}}`-style) switchable per request
@@ -42,6 +42,17 @@ npm start                   # production
 ```
 
 Open **http://localhost:3000**.
+
+### Try it against the demo API
+
+A built-in demo server exercises every Kurai feature (all methods incl. `QUERY`, every body format, all three auth schemes, status/delay/size simulators):
+
+```bash
+npm run demo                              # demo API on http://127.0.0.1:5100
+PROXY_ALLOW_PRIVATE_IPS=true npm run dev  # Kurai, allowed to reach localhost
+```
+
+Then follow the step-by-step walkthrough in [test-server/README.md](test-server/README.md).
 
 ### Docker
 
@@ -126,7 +137,7 @@ server/   Express 5 (ESM)
 
 Design principles: **zero external security dependencies** (headers, rate limiting, and validation are hand-rolled and auditable), every module documents *who it is / what it owns*, and storage is an interface so scale is a config change — not a rewrite.
 
-More detail in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+More detail in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Full product feature reference (and the Kurai-vs-Postman breakdown) in [docs/FEATURES.md](docs/FEATURES.md).
 
 ## Scaling path
 
