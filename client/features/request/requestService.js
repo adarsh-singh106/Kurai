@@ -19,7 +19,21 @@ import environmentService from '../environment/environmentService.js';
 
 const requestService = {
   sendCurrentRequest: async () => {
+    // WHY: the Send button is disabled while loading, but Enter in the URL
+    // bar and Ctrl+Enter bypass it — without this guard a held-down Enter
+    // fires duplicate in-flight requests.
+    if (state.get('ui.loading')) return;
+
     const rawRequest = state.get('currentRequest');
+
+    // Fail fast on an empty URL — a friendly message beats the proxy's 400.
+    if (!(rawRequest.url || '').trim()) {
+      eventBus.emit('response:error', new Error(
+        'Enter a request URL first — e.g. https://api.example.com/users'
+      ));
+      eventBus.emit('request:url-missing');
+      return;
+    }
 
     // Resolve mustache variables everywhere they can appear: URL, params,
     // headers, body content/fields, and auth secrets.

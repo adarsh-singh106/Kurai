@@ -296,10 +296,12 @@ function open() {
 
     if (e.key === 'ArrowDown') {
       e.preventDefault();
+      if (!count) return;               // WHY: % 0 is NaN — freezes navigation
       activeIndex = (activeIndex + 1) % count;
       updateActiveHighlight(container);
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
+      if (!count) return;
       activeIndex = (activeIndex - 1 + count) % count;
       updateActiveHighlight(container);
     } else if (e.key === 'Enter') {
@@ -340,19 +342,22 @@ const commandPalette = {
   init: () => {
     // Ctrl+K / ⌘K to open
     document.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      // WHY toLowerCase: with CapsLock on (or Shift held) e.key is 'K',
+      // which would silently kill every shortcut below.
+      const key = e.key.toLowerCase();
+      if ((e.ctrlKey || e.metaKey) && key === 'k') {
         e.preventDefault();
         if (isOpen) close();
         else open();
       }
       // Ctrl+L / ⌘L to focus URL bar
-      if ((e.ctrlKey || e.metaKey) && e.key === 'l') {
+      if ((e.ctrlKey || e.metaKey) && key === 'l') {
         e.preventDefault();
         const urlInput = document.getElementById('request-url');
         if (urlInput) { urlInput.focus(); urlInput.select(); }
       }
       // Ctrl+B to toggle sidebar
-      if ((e.ctrlKey || e.metaKey) && e.key === 'b') {
+      if ((e.ctrlKey || e.metaKey) && key === 'b') {
         e.preventDefault();
         const btn = document.getElementById('sidebar-toggle-btn');
         if (btn) btn.click();

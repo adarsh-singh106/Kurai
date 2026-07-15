@@ -11,6 +11,9 @@
  */
 
 [data-theme="light"] {
+  /* WHY color-scheme: keeps native popups/scrollbars light even on dark-OS. */
+  color-scheme: light;
+
   /* ── Brand Colours ────────────────────────────────────────────────────── */
   --color-primary: #7c3aed;
   --color-primary-hover: #8b5cf6;

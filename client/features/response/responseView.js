@@ -385,7 +385,7 @@ const responseView = {
 
   renderError: (error) => {
     lastResponse = null;
-    const { status, time, size, body, copyBtn } = els();
+    const { status, time, size, body, headers, cookies, tests, copyBtn } = els();
 
     // Clear stale metadata from any previous success.
     if (status) status.hidden = true;
@@ -395,6 +395,12 @@ const responseView = {
     setBadge('rtab-count-headers', null);
     setBadge('rtab-count-cookies', null);
     setBadge('rtab-count-tests', null);
+
+    // WHY: also wipe the hidden panes — otherwise switching to Headers/
+    // Cookies/Tests after an error shows the PREVIOUS response's data.
+    if (headers) headers.innerHTML = '<div class="empty-state">Request failed — no headers</div>';
+    if (cookies) cookies.innerHTML = '<div class="empty-state">Request failed — no cookies</div>';
+    if (tests) tests.innerHTML = '<div class="empty-state">Request failed — tests did not run</div>';
 
     // Snap back to the body tab so the error is impossible to miss.
     bodyMode = 'pretty';

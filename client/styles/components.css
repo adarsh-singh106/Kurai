@@ -262,6 +262,25 @@
 .method-select[data-method="OPTIONS"] { color: var(--method-options); }
 .method-select[data-method="QUERY"]   { color: var(--method-query); }
 
+/**
+ * Open dropdown list — each option keeps its OWN verb colour.
+ * WHY: <option> inherits `color` from the <select>, so without these rules
+ * every verb in the open list is painted the currently-selected verb's
+ * colour (all green while GET is active, all amber after picking POST).
+ */
+.method-select option {
+  background: var(--bg-panel-raised);
+  color: var(--text-main);
+}
+.method-select option[value="GET"]     { color: var(--method-get); }
+.method-select option[value="POST"]    { color: var(--method-post); }
+.method-select option[value="PUT"]     { color: var(--method-put); }
+.method-select option[value="PATCH"]   { color: var(--method-patch); }
+.method-select option[value="DELETE"]  { color: var(--method-delete); }
+.method-select option[value="HEAD"]    { color: var(--method-head); }
+.method-select option[value="OPTIONS"] { color: var(--method-options); }
+.method-select option[value="QUERY"]   { color: var(--method-query); }
+
 /** URL input — the widest control on screen; mono for path legibility. */
 .url-input {
   flex: 1;
@@ -326,6 +345,25 @@
 }
 
 .env-select:focus { outline: none; }
+
+.env-select-wrap:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-focus);
+}
+
+/** Chevron affordance — appearance:none strips the native arrow, and without
+ *  one the control reads as a static label, not a dropdown. */
+.env-select-wrap::after {
+  content: "";
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  margin-right: 4px;
+  border-right: 1.5px solid var(--text-muted);
+  border-bottom: 1.5px solid var(--text-muted);
+  transform: rotate(45deg) translateY(-1px);
+  pointer-events: none;
+}
 
 .env-select option {
   background: var(--bg-panel-raised);
@@ -1001,12 +1039,18 @@
   color: var(--text-faint);
 }
 
-/** Method colour badge inside history rows. */
+/** Method colour badge inside sidebar rows.
+ * WHY min-width + centring: "GET" and "OPTIONS" differ hugely in width —
+ * without a shared column the URL/name text starts at a ragged x-position. */
+.history-item .badge,
+.collection-request .badge,
 .history-item .method-tag {
+  flex-shrink: 0;
+  min-width: 3.5em;
+  justify-content: center;
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-xs);
   text-transform: uppercase;
-  min-width: 3.5em;
   text-align: center;
 }
 

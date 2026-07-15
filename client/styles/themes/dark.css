@@ -11,6 +11,11 @@
  */
 
 [data-theme="dark"] {
+  /* WHY color-scheme: native UI (select popups, scrollbars, form controls)
+   * must follow the app theme, not the OS — otherwise a light-OS machine
+   * renders dropdown lists on a white popup with our near-white text. */
+  color-scheme: dark;
+
   /* ── Brand Colours ────────────────────────────────────────────────────── */
   --color-primary: #8b5cf6;
   --color-primary-hover: #9d71fa;

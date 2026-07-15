@@ -360,6 +360,11 @@ const requestView = {
       if (spinner) spinner.hidden = !isLoading;
     });
 
+    // Empty-URL send attempt — put the cursor where the fix happens.
+    eventBus.on('request:url-missing', () => {
+      urlInput?.focus();
+    });
+
     // ── Sync inputs when request changes ───────────────────────────────
     eventBus.on('request:changed', (request) => {
       if (methodSelect) {
