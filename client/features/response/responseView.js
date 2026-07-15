@@ -235,8 +235,8 @@ function renderTests() {
         <div class="test-result-row ${r.passed ? 'pass' : 'fail'}">
           <span class="test-result-icon" aria-hidden="true">
             ${r.passed
-              ? '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 8.5l3.5 3.5 7.5-8"/></svg>'
-              : '<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3.5" y1="3.5" x2="12.5" y2="12.5"/><line x1="12.5" y1="3.5" x2="3.5" y2="12.5"/></svg>'}
+              ? '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+              : '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>'}
           </span>
           <span class="test-result-name">${escapeHtml(r.name)}</span>
           ${r.passed ? '' : `<span class="test-result-error">${escapeHtml(r.error || 'Assertion failed')}</span>`}
@@ -412,8 +412,10 @@ const responseView = {
     if (body) {
       body.innerHTML = `
         <div class="response-error-banner">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="flex-shrink:0;margin-top:2px">
-            <circle cx="8" cy="8" r="6.5"/><line x1="8" y1="5" x2="8" y2="8.5"/><circle cx="8" cy="11.25" r="0.5" fill="currentColor"/>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 8v4"/>
+            <path d="M12 16h.01"/>
           </svg>
           <span>${escapeHtml(error?.message || 'Failed to dispatch request')}</span>
         </div>`;

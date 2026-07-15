@@ -54,8 +54,8 @@ function renderKvEditor(container, items, commit, placeholders) {
       <input type="text" class="kv-input kv-key" placeholder="${escapeHtml(placeholders.keyPlaceholder)}" value="${escapeHtml(item.key)}" spellcheck="false" autocomplete="off">
       <input type="text" class="kv-input kv-value" placeholder="${escapeHtml(placeholders.valuePlaceholder)}" value="${escapeHtml(item.value)}" spellcheck="false" autocomplete="off">
       <button class="kv-delete" title="Remove row" aria-label="Remove row">
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-          <line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18M6 6l12 12"/>
         </svg>
       </button>`;
 
@@ -89,8 +89,8 @@ function renderKvEditor(container, items, commit, placeholders) {
   const addBtn = document.createElement('button');
   addBtn.className = 'kv-add-btn';
   addBtn.innerHTML = `
-    <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
-      <line x1="8" y1="2.5" x2="8" y2="13.5"/><line x1="2.5" y1="8" x2="13.5" y2="8"/>
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14M12 5v14"/>
     </svg>
     Add ${placeholders.rowLabel}`;
   addBtn.addEventListener('click', () => {

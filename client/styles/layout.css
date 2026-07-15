@@ -36,9 +36,9 @@
   color: var(--text-main);
 }
 
-/* ── Ambient brand glow ───────────────────────────────────────────────────
- * WHY: A faint radial violet wash behind the whole app gives depth without
- *      distracting from content — the signature "premium dark" backdrop.
+/* ── Ambient ink wash ─────────────────────────────────────────────────────
+ * WHY: A faint warm radial wash behind the whole app — like light hitting
+ *      the ink stone — gives depth without a coloured "brand glow".
  */
 .app-container::before {
   content: "";
@@ -49,7 +49,7 @@
   width: 90vw;
   height: 60vh;
   background: radial-gradient(ellipse at center,
-              rgba(139, 92, 246, 0.05) 0%,
+              rgba(235, 225, 210, 0.03) 0%,
               transparent 70%);
   pointer-events: none;
   z-index: 0;
@@ -57,7 +57,7 @@
 
 [data-theme="light"] .app-container::before {
   background: radial-gradient(ellipse at center,
-              rgba(124, 58, 237, 0.05) 0%,
+              rgba(60, 48, 36, 0.04) 0%,
               transparent 70%);
 }
 
@@ -89,7 +89,11 @@
   min-width: 0;
 }
 
-/* ── Brand lockup ────────────────────────────────────────────────────────── */
+/* ── Brand lockup — the hanko seal ───────────────────────────────────────
+ * WHY: The mark is a solid vermillion seal square holding the 暗 glyph
+ *      (kurai, "dark") in the Mincho serif — a literal name-stamp. The
+ *      wordmark sits beside it in plain warm ink; no gradient text.
+ */
 .brand {
   display: inline-flex;
   align-items: center;
@@ -104,21 +108,24 @@
   justify-content: center;
   width: 22px;
   height: 22px;
-  border-radius: var(--radius-sm);
-  background: var(--gradient-brand);
-  box-shadow: 0 1px 6px rgba(139, 92, 246, 0.35);
+  border-radius: var(--radius-xs);
+  background: var(--color-primary);
+  color: var(--text-on-primary);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  box-shadow: var(--shadow-stamp);
   flex-shrink: 0;
+  user-select: none;
 }
 
 .brand-name {
+  font-family: var(--font-display);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
-  letter-spacing: var(--tracking-tight);
-  background: var(--gradient-text);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;                  /* fallback if clip unsupported it stays readable via text-fill */
+  letter-spacing: 0.04em;
+  color: var(--text-main);
 }
 
 .brand-tag {
@@ -129,7 +136,7 @@
   color: var(--text-faint);
   padding: 2px 6px;
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-xs);
   white-space: nowrap;
 }
 
@@ -361,7 +368,7 @@
   border-left: 1px solid var(--border-color);
 }
 
-/** Pulsing green connectivity dot. */
+/** Pulsing connectivity dot — flat ink, breathing slowly, no neon glow. */
 .status-dot {
   display: inline-block;
   width: 7px;
@@ -369,7 +376,6 @@
   margin-right: var(--space-xs);
   border-radius: var(--radius-full);
   background: var(--color-success);
-  box-shadow: 0 0 6px var(--color-success);
   animation: status-pulse 2.5s ease-in-out infinite;
 }
 

@@ -26,3 +26,9 @@ coverage/
 # Build output (future)
 dist/
 build/
+
+# Local database / storage
+server/storage/file/
+
+# Agent/Local settings
+.claude/

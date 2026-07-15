@@ -50,8 +50,10 @@ const historyView = {
     if (visible.length === 0) {
       container.innerHTML = `
         <div class="empty-state">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
-            <circle cx="8" cy="8" r="6.5"/><path d="M8 4.5V8l2.5 1.5"/>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+            <path d="M12 7v5l4 2"/>
           </svg>
           <span class="empty-title">${searchQuery ? 'No matches' : 'No history yet'}</span>
           <span>${searchQuery ? 'Try a different search' : 'Sent requests will appear here'}</span>
@@ -67,8 +69,10 @@ const historyView = {
       </div>
     `).join('') + `
       <button class="history-clear-btn" id="clear-history-btn">
-        <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-          <path d="M2.5 4h11M6.5 4V2.5h3V4M4 4l.7 9.5a1 1 0 0 0 1 .93h4.6a1 1 0 0 0 1-.93L12 4"/>
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+          <line x1="10" x2="10" y1="11" y2="17"/>
+          <line x1="14" x2="14" y1="11" y2="17"/>
         </svg>
         Clear history
       </button>`;

@@ -50,19 +50,22 @@ function renderManager() {
             <div class="env-list-item${env.id === selectedEnvId ? ' active' : ''}" data-id="${escapeHtml(env.id)}">
               <span class="env-list-name">${escapeHtml(env.name)}</span>
               <button class="coll-action env-rename" title="Rename" aria-label="Rename environment">
-                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M11.5 2.5l2 2L5 13l-2.7.7L3 11l8.5-8.5z"/>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                  <path d="m15 5 4 4"/>
                 </svg>
               </button>
               <button class="coll-action env-delete" title="Delete" aria-label="Delete environment">
-                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-                  <path d="M2.5 4h11M6.5 4V2.5h3V4M4 4l.7 9.5a1 1 0 0 0 1 .93h4.6a1 1 0 0 0 1-.93L12 4"/>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                  <line x1="10" x2="10" y1="11" y2="17"/>
+                  <line x1="14" x2="14" y1="11" y2="17"/>
                 </svg>
               </button>
             </div>`).join('')}
           <button class="new-collection-btn" id="env-new-btn">
-            <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
-              <line x1="8" y1="2.5" x2="8" y2="13.5"/><line x1="2.5" y1="8" x2="13.5" y2="8"/>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5v14"/>
             </svg>
             New Environment
           </button>
@@ -163,8 +166,8 @@ function renderVarsEditor(container, items, envId) {
       <input type="text" class="kv-input kv-key" placeholder="VARIABLE" value="${escapeHtml(item.key)}" spellcheck="false" autocomplete="off">
       <input type="text" class="kv-input kv-value" placeholder="value" value="${escapeHtml(item.value)}" spellcheck="false" autocomplete="off">
       <button class="kv-delete" title="Remove variable" aria-label="Remove variable">
-        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-          <line x1="3" y1="3" x2="13" y2="13"/><line x1="13" y1="3" x2="3" y2="13"/>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18M6 6l12 12"/>
         </svg>
       </button>`;
 
@@ -194,8 +197,8 @@ function renderVarsEditor(container, items, envId) {
   const addBtn = document.createElement('button');
   addBtn.className = 'kv-add-btn';
   addBtn.innerHTML = `
-    <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round">
-      <line x1="8" y1="2.5" x2="8" y2="13.5"/><line x1="2.5" y1="8" x2="13.5" y2="8"/>
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14M12 5v14"/>
     </svg>
     Add variable`;
   addBtn.addEventListener('click', () => {

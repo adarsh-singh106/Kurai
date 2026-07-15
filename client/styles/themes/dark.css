@@ -2,9 +2,9 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * [client/styles/themes/dark.css]
  *
- * WHO I AM:    Dark mode ("Kurai") theme colour overrides.
+ * WHO I AM:    Dark mode — "Sumi" (墨, ink). Kurai's signature theme.
  * WHAT I OWN:  Overriding every colour custom property declared in tokens.css
- *              to implement the signature dark appearance.
+ *              to implement the warm carbon-black ink appearance.
  * WHAT I DON'T: Positional layouts, typography sizes, or component structure.
  * WHO CALLS ME: Activated by setting [data-theme="dark"] on <html>.
  * ─────────────────────────────────────────────────────────────────────────────
@@ -16,109 +16,104 @@
    * renders dropdown lists on a white popup with our near-white text. */
   color-scheme: dark;
 
-  /* ── Brand Colours ────────────────────────────────────────────────────── */
-  --color-primary: #8b5cf6;
-  --color-primary-hover: #9d71fa;
-  --color-primary-active: #7c4ee8;
-  --color-primary-focus: rgba(139, 92, 246, 0.35);
-  --color-primary-soft: rgba(139, 92, 246, 0.12);
-  --text-on-primary: #ffffff;
+  /* ── Brand — shu-iro vermillion (朱色) ────────────────────────────────── */
+  --color-primary: #E34234;
+  --color-primary-hover: #EB5C4A;
+  --color-primary-active: #C63625;
+  --color-primary-focus: rgba(227, 66, 52, 0.35);
+  --color-primary-soft: rgba(227, 66, 52, 0.12);
+  --text-on-primary: #FFF6EE;
 
-  --gradient-brand: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-  --gradient-brand-hover: linear-gradient(135deg, #9d71fa 0%, #7c7ef7 100%);
-  --gradient-text: linear-gradient(90deg, #a78bfa 0%, #818cf8 100%);
-
-  /* ── Backgrounds ──────────────────────────────────────────────────────
-   * WHY blue-tinted near-blacks: pure greys read flat; a whisper of blue
-   *      in the dark ramp gives depth (the Linear/Vercel trick).
+  /* ── Backgrounds — sumi ink ────────────────────────────────────────────
+   * WHY warm near-blacks: carbon ink dries warm, faintly brown — the
+   *      opposite of the blue-tinted grey every SaaS dark theme uses.
    */
-  --bg-app: #09090e;
-  --bg-panel: #0e0e15;
-  --bg-panel-raised: #13131c;
-  --bg-sidebar: #0b0b12;
-  --bg-header: rgba(11, 11, 18, 0.85);
-  --bg-hover: rgba(255, 255, 255, 0.045);
-  --bg-active: rgba(139, 92, 246, 0.12);
-  --bg-input: #12121b;
-  --bg-code: #0b0b12;
+  --bg-app: #0D0C0B;
+  --bg-panel: #131110;
+  --bg-panel-raised: #1A1715;
+  --bg-sidebar: #0F0E0D;
+  --bg-header: rgba(15, 14, 13, 0.88);
+  --bg-hover: rgba(235, 225, 210, 0.05);
+  --bg-active: rgba(227, 66, 52, 0.12);
+  --bg-input: #161413;
+  --bg-code: #0F0E0D;
 
   /* ── Borders ────────────────────────────────────────────────────────── */
-  --border-color: rgba(255, 255, 255, 0.07);
-  --border-strong: rgba(255, 255, 255, 0.12);
+  --border-color: rgba(235, 225, 210, 0.08);
+  --border-strong: rgba(235, 225, 210, 0.15);
 
-  /* ── Shadows ────────────────────────────────────────────────────────── */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.15);
-  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.35), 0 16px 48px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 0 1px rgba(139, 92, 246, 0.35),
-                 0 2px 12px rgba(139, 92, 246, 0.35),
-                 0 8px 32px rgba(139, 92, 246, 0.25);
+  /* ── Shadows — ink wash + hanko stamp offset ───────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(8, 6, 4, 0.4);
+  --shadow-md: 0 2px 6px rgba(8, 6, 4, 0.45), 0 8px 24px rgba(8, 6, 4, 0.35);
+  --shadow-lg: 0 4px 12px rgba(8, 6, 4, 0.5), 0 16px 48px rgba(8, 6, 4, 0.45);
+  --shadow-stamp: 2px 2px 0 rgba(8, 6, 4, 0.35);
+  --shadow-stamp-lifted: 3px 3px 0 rgba(8, 6, 4, 0.35);
 
-  /* ── Typography ─────────────────────────────────────────────────────── */
-  --text-main: #ededf2;
-  --text-muted: #8b8b98;
-  --text-faint: #55555f;
-  --text-link: #a78bfa;
+  /* ── Typography — aged paper on ink ───────────────────────────────────── */
+  --text-main: #EAE5DB;
+  --text-muted: #968F82;
+  --text-faint: #5C5750;
+  --text-link: #EB5C4A;
 
-  /* ── Semantic Colours ───────────────────────────────────────────────── */
-  --color-success: #34d399;
-  --color-warning: #fbbf24;
-  --color-error: #f87171;
-  --color-info: #60a5fa;
-  --color-success-soft: rgba(52, 211, 153, 0.12);
-  --color-warning-soft: rgba(251, 191, 36, 0.12);
-  --color-error-soft: rgba(248, 113, 113, 0.12);
-  --color-info-soft: rgba(96, 165, 250, 0.12);
+  /* ── Semantic Colours — traditional pigments ──────────────────────────── */
+  --color-success: #5DBE8A;
+  --color-warning: #E0A83E;
+  --color-error: #E4615C;
+  --color-info: #6E9ECF;
+  --color-success-soft: rgba(93, 190, 138, 0.12);
+  --color-warning-soft: rgba(224, 168, 62, 0.12);
+  --color-error-soft: rgba(228, 97, 92, 0.12);
+  --color-info-soft: rgba(110, 158, 207, 0.12);
 
   /* ── Legacy Status Aliases ──────────────────────────────────────────── */
-  --status-success: #34d399;
-  --status-error: #f87171;
-  --status-warning: #fbbf24;
-  --status-info: #60a5fa;
+  --status-success: #5DBE8A;
+  --status-error: #E4615C;
+  --status-warning: #E0A83E;
+  --status-info: #6E9ECF;
 
   /* ── HTTP Method Colours ────────────────────────────────────────────── */
-  --method-get: #34d399;
-  --method-post: #fbbf24;
-  --method-put: #60a5fa;
-  --method-patch: #c084fc;
-  --method-delete: #f87171;
-  --method-head: #94a3b8;
-  --method-options: #a8a29e;
-  --method-query: #22d3ee;
-  --method-get-soft: rgba(52, 211, 153, 0.12);
-  --method-post-soft: rgba(251, 191, 36, 0.12);
-  --method-put-soft: rgba(96, 165, 250, 0.12);
-  --method-patch-soft: rgba(192, 132, 252, 0.12);
-  --method-delete-soft: rgba(248, 113, 113, 0.12);
-  --method-head-soft: rgba(148, 163, 184, 0.12);
-  --method-options-soft: rgba(168, 162, 158, 0.12);
-  --method-query-soft: rgba(34, 211, 238, 0.12);
+  --method-get: #5DBE8A;
+  --method-post: #E0A83E;
+  --method-put: #6E9ECF;
+  --method-patch: #B294D6;
+  --method-delete: #E4615C;
+  --method-head: #9C9C94;
+  --method-options: #A89F91;
+  --method-query: #57B7C2;
+  --method-get-soft: rgba(93, 190, 138, 0.12);
+  --method-post-soft: rgba(224, 168, 62, 0.12);
+  --method-put-soft: rgba(110, 158, 207, 0.12);
+  --method-patch-soft: rgba(178, 148, 214, 0.12);
+  --method-delete-soft: rgba(228, 97, 92, 0.12);
+  --method-head-soft: rgba(156, 156, 148, 0.12);
+  --method-options-soft: rgba(168, 159, 145, 0.12);
+  --method-query-soft: rgba(87, 183, 194, 0.12);
 
   /* ── HTTP Status-Code Bands ─────────────────────────────────────────── */
-  --status-2xx: #34d399;
-  --status-3xx: #60a5fa;
-  --status-4xx: #fbbf24;
-  --status-5xx: #f87171;
-  --status-2xx-soft: rgba(52, 211, 153, 0.12);
-  --status-3xx-soft: rgba(96, 165, 250, 0.12);
-  --status-4xx-soft: rgba(251, 191, 36, 0.12);
-  --status-5xx-soft: rgba(248, 113, 113, 0.12);
+  --status-2xx: #5DBE8A;
+  --status-3xx: #6E9ECF;
+  --status-4xx: #E0A83E;
+  --status-5xx: #E4615C;
+  --status-2xx-soft: rgba(93, 190, 138, 0.12);
+  --status-3xx-soft: rgba(110, 158, 207, 0.12);
+  --status-4xx-soft: rgba(224, 168, 62, 0.12);
+  --status-5xx-soft: rgba(228, 97, 92, 0.12);
 
   /* ── JSON Syntax Highlighting ───────────────────────────────────────── */
-  --syntax-key: #a78bfa;
-  --syntax-string: #6ee7b7;
-  --syntax-number: #fbbf24;
-  --syntax-boolean: #60a5fa;
-  --syntax-null: #f87171;
-  --syntax-punct: #55555f;
+  --syntax-key: #F07E62;
+  --syntax-string: #A9BC7A;
+  --syntax-number: #E0A83E;
+  --syntax-boolean: #6E9ECF;
+  --syntax-null: #E4615C;
+  --syntax-punct: #5C5750;
 
   /* ── Scrollbar ──────────────────────────────────────────────────────── */
-  --scrollbar-thumb: rgba(255, 255, 255, 0.12);
+  --scrollbar-thumb: rgba(235, 225, 210, 0.12);
   --scrollbar-track: transparent;
 
   /* ── Selection ──────────────────────────────────────────────────────── */
-  --selection-bg: rgba(139, 92, 246, 0.35);
-  --selection-text: #ffffff;
+  --selection-bg: rgba(227, 66, 52, 0.35);
+  --selection-text: #FFF6EE;
 }
 
 /* ── Text Selection Styling ───────────────────────────────────────────────

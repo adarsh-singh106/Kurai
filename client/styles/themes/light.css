@@ -2,11 +2,17 @@
  * ─────────────────────────────────────────────────────────────────────────────
  * [client/styles/themes/light.css]
  *
- * WHO I AM:    Light mode theme colour overrides.
+ * WHO I AM:    Light mode — "Washi" (和紙, paper). Not an inverted dark theme.
  * WHAT I OWN:  Overriding every colour custom property declared in tokens.css
- *              to implement the light appearance.
+ *              to implement the warm paper appearance.
  * WHAT I DON'T: Positional layouts, typography sizes, or component structure.
  * WHO CALLS ME: Activated by setting [data-theme="light"] on <html>.
+ *
+ * WHY warm cream, not white: washi paper is made from mulberry fibre — it is
+ * never #FFFFFF. The cream ground keeps the same warm temperature as the
+ * sumi dark theme, so toggling feels like flipping the same sheet of paper
+ * over, not switching products. Pigments are darkened (not just reused) so
+ * they hold WCAG contrast on the light ground.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -14,109 +20,101 @@
   /* WHY color-scheme: keeps native popups/scrollbars light even on dark-OS. */
   color-scheme: light;
 
-  /* ── Brand Colours ────────────────────────────────────────────────────── */
-  --color-primary: #7c3aed;
-  --color-primary-hover: #8b5cf6;
-  --color-primary-active: #6d28d9;
-  --color-primary-focus: rgba(124, 58, 237, 0.22);
-  --color-primary-soft: rgba(124, 58, 237, 0.08);
-  --text-on-primary: #ffffff;
+  /* ── Brand — deeper seal-red for paper contrast ───────────────────────── */
+  --color-primary: #C03A24;
+  --color-primary-hover: #A93318;
+  --color-primary-active: #962D15;
+  --color-primary-focus: rgba(192, 58, 36, 0.25);
+  --color-primary-soft: rgba(192, 58, 36, 0.09);
+  --text-on-primary: #FFF6EE;
 
-  --gradient-brand: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%);
-  --gradient-brand-hover: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-  --gradient-text: linear-gradient(90deg, #7c3aed 0%, #4f46e5 100%);
+  /* ── Backgrounds — washi paper ─────────────────────────────────────────── */
+  --bg-app: #F3EDE2;
+  --bg-panel: #FAF6EC;
+  --bg-panel-raised: #FFFCF4;
+  --bg-sidebar: #EEE7DA;
+  --bg-header: rgba(250, 246, 236, 0.88);
+  --bg-hover: rgba(60, 48, 36, 0.05);
+  --bg-active: rgba(192, 58, 36, 0.08);
+  --bg-input: #FFFCF4;
+  --bg-code: #F3EDE2;
 
-  /* ── Backgrounds ──────────────────────────────────────────────────────
-   * WHY cool-tinted whites: matches the blue-tinted dark ramp so switching
-   *      themes feels like the same product, not two different apps.
-   */
-  --bg-app: #f7f7fa;
-  --bg-panel: #ffffff;
-  --bg-panel-raised: #ffffff;
-  --bg-sidebar: #f2f2f7;
-  --bg-header: rgba(255, 255, 255, 0.85);
-  --bg-hover: rgba(15, 15, 35, 0.045);
-  --bg-active: rgba(124, 58, 237, 0.09);
-  --bg-input: #ffffff;
-  --bg-code: #f7f7fa;
+  /* ── Borders — sumi-wash greys, doing the depth work shadows can't ────── */
+  --border-color: rgba(60, 48, 36, 0.12);
+  --border-strong: rgba(60, 48, 36, 0.22);
 
-  /* ── Borders ────────────────────────────────────────────────────────── */
-  --border-color: rgba(15, 15, 35, 0.08);
-  --border-strong: rgba(15, 15, 35, 0.14);
+  /* ── Shadows — faint ink wash; paper depth comes from borders ─────────── */
+  --shadow-sm: 0 1px 2px rgba(60, 48, 36, 0.08);
+  --shadow-md: 0 2px 4px rgba(60, 48, 36, 0.08), 0 8px 24px rgba(60, 48, 36, 0.10);
+  --shadow-lg: 0 4px 8px rgba(60, 48, 36, 0.10), 0 16px 48px rgba(60, 48, 36, 0.14);
+  --shadow-stamp: 2px 2px 0 rgba(60, 48, 36, 0.18);
+  --shadow-stamp-lifted: 3px 3px 0 rgba(60, 48, 36, 0.18);
 
-  /* ── Shadows ────────────────────────────────────────────────────────── */
-  --shadow-sm: 0 1px 2px rgba(15, 15, 35, 0.06), 0 1px 3px rgba(15, 15, 35, 0.05);
-  --shadow-md: 0 2px 4px rgba(15, 15, 35, 0.06), 0 8px 24px rgba(15, 15, 35, 0.08);
-  --shadow-lg: 0 4px 8px rgba(15, 15, 35, 0.08), 0 16px 48px rgba(15, 15, 35, 0.12);
-  --shadow-glow: 0 0 0 1px rgba(124, 58, 237, 0.25),
-                 0 2px 12px rgba(124, 58, 237, 0.25),
-                 0 8px 32px rgba(124, 58, 237, 0.15);
+  /* ── Typography — ink on paper ─────────────────────────────────────────── */
+  --text-main: #211D18;
+  --text-muted: #6B6357;
+  --text-faint: #A39A8B;
+  --text-link: #C03A24;
 
-  /* ── Typography ─────────────────────────────────────────────────────── */
-  --text-main: #17171f;
-  --text-muted: #5d5d6b;
-  --text-faint: #9c9ca8;
-  --text-link: #7c3aed;
-
-  /* ── Semantic Colours ───────────────────────────────────────────────── */
-  --color-success: #059669;
-  --color-warning: #d97706;
-  --color-error: #dc2626;
-  --color-info: #2563eb;
-  --color-success-soft: rgba(5, 150, 105, 0.1);
-  --color-warning-soft: rgba(217, 119, 6, 0.1);
-  --color-error-soft: rgba(220, 38, 38, 0.1);
-  --color-info-soft: rgba(37, 99, 235, 0.1);
+  /* ── Semantic Colours — pigments darkened for paper ────────────────────── */
+  --color-success: #2E7D54;
+  --color-warning: #A66A0F;
+  --color-error: #BB3A35;
+  --color-info: #3A6B9E;
+  --color-success-soft: rgba(46, 125, 84, 0.10);
+  --color-warning-soft: rgba(166, 106, 15, 0.10);
+  --color-error-soft: rgba(187, 58, 53, 0.10);
+  --color-info-soft: rgba(58, 107, 158, 0.10);
 
   /* ── Legacy Status Aliases ──────────────────────────────────────────── */
-  --status-success: #059669;
-  --status-error: #dc2626;
-  --status-warning: #d97706;
-  --status-info: #2563eb;
+  --status-success: #2E7D54;
+  --status-error: #BB3A35;
+  --status-warning: #A66A0F;
+  --status-info: #3A6B9E;
 
   /* ── HTTP Method Colours ────────────────────────────────────────────── */
-  --method-get: #059669;
-  --method-post: #d97706;
-  --method-put: #2563eb;
-  --method-patch: #9333ea;
-  --method-delete: #dc2626;
-  --method-head: #475569;
-  --method-options: #57534e;
-  --method-query: #0891b2;
-  --method-get-soft: rgba(5, 150, 105, 0.1);
-  --method-post-soft: rgba(217, 119, 6, 0.1);
-  --method-put-soft: rgba(37, 99, 235, 0.1);
-  --method-patch-soft: rgba(147, 51, 234, 0.1);
-  --method-delete-soft: rgba(220, 38, 38, 0.1);
-  --method-head-soft: rgba(71, 85, 105, 0.1);
-  --method-options-soft: rgba(87, 83, 78, 0.1);
-  --method-query-soft: rgba(8, 145, 178, 0.1);
+  --method-get: #2E7D54;
+  --method-post: #A66A0F;
+  --method-put: #3A6B9E;
+  --method-patch: #7B5AA6;
+  --method-delete: #BB3A35;
+  --method-head: #6B6B63;
+  --method-options: #75695A;
+  --method-query: #1F7E8C;
+  --method-get-soft: rgba(46, 125, 84, 0.10);
+  --method-post-soft: rgba(166, 106, 15, 0.10);
+  --method-put-soft: rgba(58, 107, 158, 0.10);
+  --method-patch-soft: rgba(123, 90, 166, 0.10);
+  --method-delete-soft: rgba(187, 58, 53, 0.10);
+  --method-head-soft: rgba(107, 107, 99, 0.10);
+  --method-options-soft: rgba(117, 105, 90, 0.10);
+  --method-query-soft: rgba(31, 126, 140, 0.10);
 
   /* ── HTTP Status-Code Bands ─────────────────────────────────────────── */
-  --status-2xx: #059669;
-  --status-3xx: #2563eb;
-  --status-4xx: #d97706;
-  --status-5xx: #dc2626;
-  --status-2xx-soft: rgba(5, 150, 105, 0.1);
-  --status-3xx-soft: rgba(37, 99, 235, 0.1);
-  --status-4xx-soft: rgba(217, 119, 6, 0.1);
-  --status-5xx-soft: rgba(220, 38, 38, 0.1);
+  --status-2xx: #2E7D54;
+  --status-3xx: #3A6B9E;
+  --status-4xx: #A66A0F;
+  --status-5xx: #BB3A35;
+  --status-2xx-soft: rgba(46, 125, 84, 0.10);
+  --status-3xx-soft: rgba(58, 107, 158, 0.10);
+  --status-4xx-soft: rgba(166, 106, 15, 0.10);
+  --status-5xx-soft: rgba(187, 58, 53, 0.10);
 
-  /* ── JSON Syntax Highlighting ───────────────────────────────────────── */
-  --syntax-key: #7c3aed;
-  --syntax-string: #059669;
-  --syntax-number: #d97706;
-  --syntax-boolean: #2563eb;
-  --syntax-null: #dc2626;
-  --syntax-punct: #9c9ca8;
+  /* ── JSON Syntax Highlighting — ink & pigment on paper ─────────────────── */
+  --syntax-key: #C03A24;
+  --syntax-string: #5A7038;
+  --syntax-number: #A66A0F;
+  --syntax-boolean: #3A6B9E;
+  --syntax-null: #BB3A35;
+  --syntax-punct: #A39A8B;
 
   /* ── Scrollbar ──────────────────────────────────────────────────────── */
-  --scrollbar-thumb: rgba(15, 15, 35, 0.18);
+  --scrollbar-thumb: rgba(60, 48, 36, 0.20);
   --scrollbar-track: transparent;
 
   /* ── Selection ──────────────────────────────────────────────────────── */
-  --selection-bg: rgba(124, 58, 237, 0.18);
-  --selection-text: #17171f;
+  --selection-bg: rgba(192, 58, 36, 0.18);
+  --selection-text: #211D18;
 }
 
 /* ── Text Selection Styling ───────────────────────────────────────────────*/

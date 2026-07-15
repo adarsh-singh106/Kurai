@@ -5,10 +5,17 @@
  * WHO I AM:    Design-token stylesheet — the single source of truth for every
  *              visual constant in Kurai.
  * WHAT I OWN:  CSS custom properties for spacing, typography, colour, shadows,
- *              radii, z-indices, transitions, gradients, and opacity.
+ *              radii, z-indices, transitions, and opacity.
  * WHAT I DON'T: Apply styles to DOM selectors (→ components.css) or define
  *               theme-specific overrides (→ themes/*.css).
  * WHO CALLS ME: Loaded by client/index.html and referenced everywhere.
+ *
+ * DESIGN LANGUAGE — "Sumi & Washi" (墨と和紙):
+ *   Kurai (暗い) means "dark". The visual system leans into it — dark theme
+ *   is sumi ink (warm carbon black, not the usual blue-tinted grey), light
+ *   theme is washi paper (warm cream, not sterile white). ONE accent colour:
+ *   shu-iro vermillion — the red of hanko seal stamps. No gradients anywhere;
+ *   ink doesn't fade between two hues.
  *
  * NOTE: The :root block doubles as a dark-theme fallback — if no
  *       [data-theme] attribute is present, the app renders in dark mode.
@@ -17,11 +24,15 @@
 
 :root {
   /* ── Typography — Font Families ─────────────────────────────────────────
-   * WHY: Inter is the de-facto SaaS product typeface; JetBrains Mono gives
-   *      code panes a premium developer-tool feel. Both fall back to system.
+   * WHY: Zen Kaku Gothic New is a Japanese-designed grotesque — its Latin
+   *      glyphs carry a calm, slightly wide rhythm no Inter clone has, and
+   *      it renders the 暗/送 brand glyphs natively. Shippori Mincho is the
+   *      ink-brush serif reserved for the brand mark and hero moments.
    */
-  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI Variable",
-               "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-body: "Zen Kaku Gothic New", "Hiragino Sans", "Yu Gothic UI",
+               -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho",
+                  Georgia, serif;
   --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", "SF Mono",
                Consolas, "Courier New", monospace;
 
@@ -48,17 +59,12 @@
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.65;
 
-  /* ── Typography — Letter Spacing ────────────────────────────────────────
-   * WHY: Slight negative tracking on headings and slight positive tracking
-   *      on all-caps labels is the signature of modern SaaS typography.
-   */
-  --tracking-tight: -0.02em;
+  /* ── Typography — Letter Spacing ────────────────────────────────────────*/
+  --tracking-tight: -0.01em;
   --tracking-normal: 0;
-  --tracking-wide: 0.06em;
+  --tracking-wide: 0.08em;
 
-  /* ── Spacing (rem) ──────────────────────────────────────────────────────
-   * WHY: rem spacing scales proportionally with the user's root font-size.
-   */
+  /* ── Spacing (rem) ──────────────────────────────────────────────────────*/
   --space-2xs: 0.125rem; /*  2px */
   --space-xs: 0.25rem;   /*  4px */
   --space-sm: 0.5rem;    /*  8px */
@@ -66,44 +72,35 @@
   --space-lg: 1.5rem;    /* 24px */
   --space-xl: 2rem;      /* 32px */
 
-  /* ── Border Radii ───────────────────────────────────────────────────────*/
-  --radius-xs: 4px;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  /* ── Border Radii ───────────────────────────────────────────────────────
+   * WHY sharp: seal stamps and ink blocks have crisp edges. The scale is
+   *      deliberately tighter than the SaaS-default 8–16px pillow corners.
+   *      --radius-full survives only for dots and spinners (true circles).
+   */
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
   --radius-full: 9999px;
 
   /* ── Shadows ────────────────────────────────────────────────────────────
-   * WHY: Layered two-part shadows (tight ambient + soft key light) read as
-   *      "premium" vs. single flat blurs. Glow tier is for the brand CTA.
+   * WHY: Ink-wash shadows — soft, warm-black, no coloured glow tiers.
+   *      The "stamp" shadow is the one signature: a hard 2px offset like
+   *      a hanko pressed slightly off-register.
    */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.15);
-  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.35), 0 16px 48px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 0 1px rgba(139, 92, 246, 0.35),
-                 0 2px 12px rgba(139, 92, 246, 0.35),
-                 0 8px 32px rgba(139, 92, 246, 0.25);
+  --shadow-sm: 0 1px 2px rgba(8, 6, 4, 0.4);
+  --shadow-md: 0 2px 6px rgba(8, 6, 4, 0.45), 0 8px 24px rgba(8, 6, 4, 0.35);
+  --shadow-lg: 0 4px 12px rgba(8, 6, 4, 0.5), 0 16px 48px rgba(8, 6, 4, 0.45);
+  --shadow-stamp: 2px 2px 0 rgba(8, 6, 4, 0.35);
+  --shadow-stamp-lifted: 3px 3px 0 rgba(8, 6, 4, 0.35);
 
-  /* ── Brand Gradient ─────────────────────────────────────────────────────
-   * WHY: A violet→indigo sweep is the app's visual signature — used on the
-   *      logo mark, the Send button, and active accents.
-   */
-  --gradient-brand: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-  --gradient-brand-hover: linear-gradient(135deg, #9d71fa 0%, #7c7ef7 100%);
-  --gradient-text: linear-gradient(90deg, #a78bfa 0%, #818cf8 100%);
-
-  /* ── Z-Index Scale ──────────────────────────────────────────────────────
-   * WHY: Defined tokens prevent z-index wars across components.
-   */
+  /* ── Z-Index Scale ──────────────────────────────────────────────────────*/
   --z-dropdown: 100;
   --z-modal: 200;
   --z-toast: 300;
 
-  /* ── Transitions ────────────────────────────────────────────────────────
-   * WHY: cubic-bezier "ease-out-quart" feels snappier than plain ease —
-   *      fast start, gentle settle. The spring curve is for playful pops.
-   */
+  /* ── Transitions ────────────────────────────────────────────────────────*/
   --transition-fast: 150ms cubic-bezier(0.25, 1, 0.5, 1);
   --transition-normal: 250ms cubic-bezier(0.25, 1, 0.5, 1);
   --transition-slow: 350ms cubic-bezier(0.25, 1, 0.5, 1);
@@ -114,112 +111,112 @@
 
   /* ── Opacity ────────────────────────────────────────────────────────────*/
   --opacity-disabled: 0.45;
-  --overlay-bg: rgba(0, 0, 0, 0.6);
+  --overlay-bg: rgba(10, 8, 6, 0.65);
 
   /* ══════════════════════════════════════════════════════════════════════
-   * FALLBACK COLOURS (dark-theme defaults)
+   * FALLBACK COLOURS (dark-theme "Sumi" defaults)
    * WHY: These kick in when no [data-theme] attribute is set, ensuring
    *      the app never renders with missing colour values.
    * ══════════════════════════════════════════════════════════════════════*/
 
-  /* ── Brand ──────────────────────────────────────────────────────────────*/
-  --color-primary: #8b5cf6;
-  --color-primary-hover: #9d71fa;
-  --color-primary-active: #7c4ee8;
-  --color-primary-focus: rgba(139, 92, 246, 0.35);
-  --color-primary-soft: rgba(139, 92, 246, 0.12);
-  --text-on-primary: #ffffff;
+  /* ── Brand — shu-iro vermillion (朱色), the hanko seal red ───────────────*/
+  --color-primary: #E34234;
+  --color-primary-hover: #EB5C4A;
+  --color-primary-active: #C63625;
+  --color-primary-focus: rgba(227, 66, 52, 0.35);
+  --color-primary-soft: rgba(227, 66, 52, 0.12);
+  --text-on-primary: #FFF6EE;
 
-  /* ── Backgrounds ────────────────────────────────────────────────────────
-   * WHY blue-tinted near-blacks: pure greys read flat; a whisper of blue
-   *      in the dark ramp is what gives Linear/Vercel their depth.
+  /* ── Backgrounds — sumi ink ─────────────────────────────────────────────
+   * WHY warm near-blacks: every AI-generated dark theme is blue-tinted.
+   *      Sumi ink is carbon — it dries warm, faintly brown. This single
+   *      temperature choice makes the whole app read hand-made.
    */
-  --bg-app: #09090e;
-  --bg-panel: #0e0e15;
-  --bg-panel-raised: #13131c;
-  --bg-sidebar: #0b0b12;
-  --bg-header: rgba(11, 11, 18, 0.85);
-  --bg-hover: rgba(255, 255, 255, 0.045);
-  --bg-active: rgba(139, 92, 246, 0.12);
-  --bg-input: #12121b;
-  --bg-code: #0b0b12;
+  --bg-app: #0D0C0B;
+  --bg-panel: #131110;
+  --bg-panel-raised: #1A1715;
+  --bg-sidebar: #0F0E0D;
+  --bg-header: rgba(15, 14, 13, 0.88);
+  --bg-hover: rgba(235, 225, 210, 0.05);
+  --bg-active: rgba(227, 66, 52, 0.12);
+  --bg-input: #161413;
+  --bg-code: #0F0E0D;
 
-  /* ── Borders ────────────────────────────────────────────────────────────*/
-  --border-color: rgba(255, 255, 255, 0.07);
-  --border-strong: rgba(255, 255, 255, 0.12);
+  /* ── Borders — warm paper-white washes ──────────────────────────────────*/
+  --border-color: rgba(235, 225, 210, 0.08);
+  --border-strong: rgba(235, 225, 210, 0.15);
 
-  /* ── Typography Colours ─────────────────────────────────────────────────*/
-  --text-main: #ededf2;
-  --text-muted: #8b8b98;
-  --text-faint: #55555f;
-  --text-link: #a78bfa;
+  /* ── Typography Colours — aged paper on ink ─────────────────────────────*/
+  --text-main: #EAE5DB;
+  --text-muted: #968F82;
+  --text-faint: #5C5750;
+  --text-link: #EB5C4A;
 
-  /* ── Semantic Colours ───────────────────────────────────────────────────*/
-  --color-success: #34d399;
-  --color-warning: #fbbf24;
-  --color-error: #f87171;
-  --color-info: #60a5fa;
-
-  /* ── Semantic Soft Tints (badge/pill backgrounds) ───────────────────────
-   * WHY: Tinted pill + coloured text reads far more premium than solid
-   *      saturated badge blocks.
+  /* ── Semantic Colours — traditional pigments ────────────────────────────
+   * success = wakatake bamboo green, warning = yamabuki gold,
+   * error = akane madder red, info = ai indigo.
    */
-  --color-success-soft: rgba(52, 211, 153, 0.12);
-  --color-warning-soft: rgba(251, 191, 36, 0.12);
-  --color-error-soft: rgba(248, 113, 113, 0.12);
-  --color-info-soft: rgba(96, 165, 250, 0.12);
+  --color-success: #5DBE8A;
+  --color-warning: #E0A83E;
+  --color-error: #E4615C;
+  --color-info: #6E9ECF;
+  --color-success-soft: rgba(93, 190, 138, 0.12);
+  --color-warning-soft: rgba(224, 168, 62, 0.12);
+  --color-error-soft: rgba(228, 97, 92, 0.12);
+  --color-info-soft: rgba(110, 158, 207, 0.12);
 
   /* ── Status Colours (legacy aliases kept for compat) ────────────────────*/
-  --status-success: #34d399;
-  --status-error: #f87171;
-  --status-warning: #fbbf24;
-  --status-info: #60a5fa;
+  --status-success: #5DBE8A;
+  --status-error: #E4615C;
+  --status-warning: #E0A83E;
+  --status-info: #6E9ECF;
 
   /* ── HTTP Method Colours ────────────────────────────────────────────────*/
-  --method-get: #34d399;
-  --method-post: #fbbf24;
-  --method-put: #60a5fa;
-  --method-patch: #c084fc;
-  --method-delete: #f87171;
-  --method-head: #94a3b8;
-  --method-options: #a8a29e;
-  --method-query: #22d3ee;
+  --method-get: #5DBE8A;      /* wakatake green  */
+  --method-post: #E0A83E;     /* yamabuki gold   */
+  --method-put: #6E9ECF;      /* ai indigo       */
+  --method-patch: #B294D6;    /* fuji wisteria   */
+  --method-delete: #E4615C;   /* akane red       */
+  --method-head: #9C9C94;     /* nezumi grey     */
+  --method-options: #A89F91;  /* rikyū brown-grey*/
+  --method-query: #57B7C2;    /* asagi cyan ⭐   */
 
   /* ── HTTP Method Soft Tints ─────────────────────────────────────────────*/
-  --method-get-soft: rgba(52, 211, 153, 0.12);
-  --method-post-soft: rgba(251, 191, 36, 0.12);
-  --method-put-soft: rgba(96, 165, 250, 0.12);
-  --method-patch-soft: rgba(192, 132, 252, 0.12);
-  --method-delete-soft: rgba(248, 113, 113, 0.12);
-  --method-head-soft: rgba(148, 163, 184, 0.12);
-  --method-options-soft: rgba(168, 162, 158, 0.12);
-  --method-query-soft: rgba(34, 211, 238, 0.12);
+  --method-get-soft: rgba(93, 190, 138, 0.12);
+  --method-post-soft: rgba(224, 168, 62, 0.12);
+  --method-put-soft: rgba(110, 158, 207, 0.12);
+  --method-patch-soft: rgba(178, 148, 214, 0.12);
+  --method-delete-soft: rgba(228, 97, 92, 0.12);
+  --method-head-soft: rgba(156, 156, 148, 0.12);
+  --method-options-soft: rgba(168, 159, 145, 0.12);
+  --method-query-soft: rgba(87, 183, 194, 0.12);
 
   /* ── HTTP Status-Code Band Colours ──────────────────────────────────────*/
-  --status-2xx: #34d399;
-  --status-3xx: #60a5fa;
-  --status-4xx: #fbbf24;
-  --status-5xx: #f87171;
-  --status-2xx-soft: rgba(52, 211, 153, 0.12);
-  --status-3xx-soft: rgba(96, 165, 250, 0.12);
-  --status-4xx-soft: rgba(251, 191, 36, 0.12);
-  --status-5xx-soft: rgba(248, 113, 113, 0.12);
+  --status-2xx: #5DBE8A;
+  --status-3xx: #6E9ECF;
+  --status-4xx: #E0A83E;
+  --status-5xx: #E4615C;
+  --status-2xx-soft: rgba(93, 190, 138, 0.12);
+  --status-3xx-soft: rgba(110, 158, 207, 0.12);
+  --status-4xx-soft: rgba(224, 168, 62, 0.12);
+  --status-5xx-soft: rgba(228, 97, 92, 0.12);
 
-  /* ── JSON Syntax Highlighting ───────────────────────────────────────────
-   * WHY: One-Dark-inspired palette; keys pop, values recede, structure fades.
+  /* ── JSON Syntax Highlighting — ink & pigment ───────────────────────────
+   * WHY: keys carry the vermillion accent (the seal on the page), strings
+   *      recede into matcha green, structure fades to faint ink.
    */
-  --syntax-key: #a78bfa;
-  --syntax-string: #6ee7b7;
-  --syntax-number: #fbbf24;
-  --syntax-boolean: #60a5fa;
-  --syntax-null: #f87171;
-  --syntax-punct: #55555f;
+  --syntax-key: #F07E62;
+  --syntax-string: #A9BC7A;
+  --syntax-number: #E0A83E;
+  --syntax-boolean: #6E9ECF;
+  --syntax-null: #E4615C;
+  --syntax-punct: #5C5750;
 
   /* ── Scrollbar ──────────────────────────────────────────────────────────*/
-  --scrollbar-thumb: rgba(255, 255, 255, 0.10);
+  --scrollbar-thumb: rgba(235, 225, 210, 0.12);
   --scrollbar-track: transparent;
 
   /* ── Selection ──────────────────────────────────────────────────────────*/
-  --selection-bg: rgba(139, 92, 246, 0.35);
-  --selection-text: #ffffff;
+  --selection-bg: rgba(227, 66, 52, 0.35);
+  --selection-text: #FFF6EE;
 }

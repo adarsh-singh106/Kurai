@@ -45,36 +45,49 @@
 }
 
 /**
- * Send button — the hero CTA. Gradient fill + brand glow that intensifies
- * on hover. WHY a dedicated class: this is the single most-used control in
- * the app and deserves its own visual weight.
+ * Send button — the hero CTA, styled as a hanko seal stamp: solid
+ * vermillion block, crisp corners, hard offset shadow. On press the
+ * shadow collapses and the button drops into it — the stamp hits paper.
+ * WHY a dedicated class: this is the single most-used control in the app
+ * and deserves its own visual weight.
  */
 .btn-send {
   position: relative;
   min-width: 92px;
   padding: 0 var(--space-lg);
   height: 36px;
-  background: var(--gradient-brand);
+  background: var(--color-primary);
   color: var(--text-on-primary);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3),
-              0 0 12px rgba(139, 92, 246, 0.2);
-  letter-spacing: 0.01em;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-stamp);
+  letter-spacing: 0.02em;
 }
 
 .btn-send:hover {
-  background: var(--gradient-brand-hover);
-  box-shadow: var(--shadow-glow);
-  transform: translateY(-1px);
+  background: var(--color-primary-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-stamp-lifted);
 }
 
 .btn-send:active {
-  transform: translateY(0) scale(0.98);
+  background: var(--color-primary-active);
+  transform: translate(2px, 2px);
+  box-shadow: none;
 }
 
 .btn-send-label {
   display: inline-flex;
   align-items: center;
   gap: var(--space-xs);
+}
+
+/** 送 ("send") glyph — the seal-script character replaces the generic
+ *  paper-plane icon; rendered in the Mincho display serif. */
+.btn-send-glyph {
+  font-family: var(--font-display);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
 }
 
 /** In-flight state — label hides, spinner shows (toggled by JS). */
@@ -172,7 +185,7 @@
 
 .input-text:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-focus, rgba(139, 92, 246, 0.3));
+  box-shadow: 0 0 0 3px var(--color-primary-focus, rgba(227, 66, 52, 0.3));
   outline: none;
 }
 
@@ -375,14 +388,16 @@
  * ╚═══════════════════════════════════════════════════════════════════════════╝ */
 
 /**
- * WHY tinted pills: soft background + saturated text reads far more
- * premium than solid colour blocks, and works in both themes.
+ * WHY square stamps, not rounded pills: badges are ink stamps on paper —
+ * crisp corners + a hairline border in the badge's own colour. The 1px
+ * tinted border is the detail that reads "designed" instead of "default".
  */
 .badge {
   display: inline-flex;
   align-items: center;
   padding: 2px 8px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-xs);
+  border: 1px solid transparent;
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   line-height: 1.5;
@@ -391,10 +406,10 @@
 }
 
 /* ── Semantic badge modifiers ────────────────────────────────────────────── */
-.badge-success { background: var(--color-success-soft); color: var(--color-success); }
-.badge-error   { background: var(--color-error-soft);   color: var(--color-error); }
-.badge-warning { background: var(--color-warning-soft); color: var(--color-warning); }
-.badge-info    { background: var(--color-info-soft);    color: var(--color-info); }
+.badge-success { background: var(--color-success-soft); color: var(--color-success); border-color: var(--color-success-soft); }
+.badge-error   { background: var(--color-error-soft);   color: var(--color-error);   border-color: var(--color-error-soft); }
+.badge-warning { background: var(--color-warning-soft); color: var(--color-warning); border-color: var(--color-warning-soft); }
+.badge-info    { background: var(--color-info-soft);    color: var(--color-info);    border-color: var(--color-info-soft); }
 
 /* ── HTTP Method Badges ──────────────────────────────────────────────────── */
 .badge-get,
@@ -429,21 +444,20 @@
   align-items: center;
   gap: 6px;
   padding: 3px 10px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-xs);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   font-family: var(--font-mono);
   animation: pill-pop var(--transition-spring);
 }
 
-/** Leading dot inside the pill. */
+/** Leading dot inside the pill — flat ink dot, no glow. */
 .status-pill::before {
   content: "";
   width: 6px;
   height: 6px;
   border-radius: var(--radius-full);
   background: currentColor;
-  box-shadow: 0 0 6px currentColor;
 }
 
 @keyframes pill-pop {
@@ -466,7 +480,7 @@
   color: var(--text-muted);
   padding: 3px 8px;
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-xs);
 }
 
 /* ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -580,7 +594,7 @@
 }
 
 .kv-row input[type="checkbox"]:checked {
-  background: var(--gradient-brand);
+  background: var(--color-primary);
   border-color: transparent;
 }
 
@@ -706,7 +720,7 @@
   font-weight: var(--font-weight-medium);
   color: var(--text-muted);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-sm);
   transition: all var(--transition-fast);
 }
 
@@ -1331,7 +1345,8 @@
   text-align: center;
 }
 
-/** Floating gradient orb with the bolt mark. */
+/** The waiting seal — the 暗 glyph resting as a faint ink stamp until the
+ *  first request "presses" it. Square like every other stamp in the app. */
 .response-empty-orb {
   display: flex;
   align-items: center;
@@ -1339,9 +1354,15 @@
   width: 48px;
   height: 48px;
   margin-bottom: var(--space-xs);
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-primary-soft);
   background: var(--color-primary-soft);
   color: var(--color-primary);
+  font-family: var(--font-display);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  user-select: none;
   animation: orb-float 4s ease-in-out infinite;
 }
 
@@ -1433,7 +1454,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--gradient-brand);
+  background: var(--color-primary);
   animation: loading-slide 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
@@ -2019,11 +2040,11 @@
  * ║  SMOOTH LOADING TRANSITIONS                                             ║
  * ╚═══════════════════════════════════════════════════════════════════════════╝ */
 
-/** Send button hover → glow ramp that feels controlled, not flashy. */
+/** Send button hover/press — the stamp gesture, controlled not flashy. */
 .btn-send {
   transition: background var(--transition-fast),
-              box-shadow 200ms ease,
-              transform var(--transition-fast);
+              box-shadow 120ms ease,
+              transform 120ms ease;
 }
 
 /** Sidebar panel transition polish. */
